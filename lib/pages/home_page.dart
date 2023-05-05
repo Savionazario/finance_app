@@ -1,5 +1,7 @@
+import 'package:finance_app/cubits/authentication/authentication_cubit.dart';
 import 'package:finance_app/pages/history_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,13 +32,20 @@ class _HomePageState extends State<HomePage> {
 
   int paginaAtual = 0;
 
+  late final AuthenticationCubit _authenticationCubit;
+
+  @override
+  void initState() {
+    _authenticationCubit = context.read<AuthenticationCubit>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: colorBackGround,
-        
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,6 +54,7 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "Minhas finanças",
@@ -54,6 +64,20 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      child: TextButton(
+                        style:
+                            TextButton.styleFrom(backgroundColor: Colors.grey[300]),
+                        child: Icon(
+                          Icons.logout,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          _authenticationCubit.signOut();
+                        },
                       ),
                     ),
                   ],
