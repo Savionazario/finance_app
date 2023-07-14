@@ -23,6 +23,7 @@ class AuthService {
       print("Token: $tokenResult");
       print("-------------------------------\n");
       // return "Sucess";
+      print("USER: ${response.user}");
       return response.user;
   }
 

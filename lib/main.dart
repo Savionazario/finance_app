@@ -1,8 +1,15 @@
-import 'package:finance_app/cubits/authentication/authentication_cubit.dart';
-import 'package:finance_app/cubits/login/login_cubit.dart';
-import 'package:finance_app/pages/auth_check.dart';
-import 'package:finance_app/pages/inital_page.dart';
-import 'package:finance_app/pages/login_page.dart';
+import 'package:finance_app/core/injection/injection_container.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
+import 'package:finance_app/layers/data/datasources/firebase/firebase_datasource_impl.dart';
+import 'package:finance_app/layers/data/repositories/firebase_repository_impl.dart';
+import 'package:finance_app/layers/domain/usecases/isSignIn/is_sign_in_usecase_impl.dart';
+import 'package:finance_app/layers/domain/usecases/signIn/sign_in_with_email_and_password_usecase.dart';
+import 'package:finance_app/layers/domain/usecases/signIn/sign_in_with_email_and_password_usecase_impl.dart';
+import 'package:finance_app/layers/domain/usecases/signOut/sign_out_usecase_impl.dart';
+import 'package:finance_app/layers/presentation/ui/pages/auth_check.dart';
+import 'package:finance_app/layers/presentation/ui/pages/inital_page.dart';
+import 'package:finance_app/layers/presentation/ui/pages/login_page.dart';
 import 'package:finance_app/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +19,9 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  InjectionContainer.init();
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -22,8 +30,39 @@ void main() async {
     MultiProvider(
       providers: [
         Provider(create: (context) => AuthService()),
-        BlocProvider(create: (context) => LoginCubit(context.read<AuthService>())),
-        BlocProvider(create: (context) => AuthenticationCubit(context.read<AuthService>())),
+        Provider(create: (context) => FirebaseDataSourceImpl()),
+        Provider(
+          create: (context) => FirebaseRepositoryImpl(
+            context.read<FirebaseDataSourceImpl>(),
+          ),
+        ),
+        Provider(
+          create: (context) => IsSignInUseCaseImpl(
+            context.read<FirebaseRepositoryImpl>(),
+          ),
+        ),
+        Provider(
+          create: (context) => SignInWithEmailAndPasswordUseCaseImpl(
+            context.read<FirebaseRepositoryImpl>(),
+          ),
+        ),
+        Provider(
+          create: (context) => SignOutUseCaseImpl(
+            context.read<FirebaseRepositoryImpl>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AuthenticationCubit(
+            context.read<IsSignInUseCaseImpl>(),
+            context.read<SignOutUseCaseImpl>(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => LoginCubit(
+            context.read<SignInWithEmailAndPasswordUseCaseImpl>(),
+            context.read<AuthenticationCubit>(),
+          ),
+        ),
       ],
       child: const MyApp(),
     ),

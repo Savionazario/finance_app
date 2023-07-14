@@ -1,9 +1,10 @@
-import 'package:finance_app/cubits/authentication/authentication_cubit.dart';
-import 'package:finance_app/cubits/authentication/authentication_state.dart';
-import 'package:finance_app/pages/inital_page.dart';
-import 'package:finance_app/pages/login_page.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_state.dart';
+import 'package:finance_app/layers/presentation/ui/pages/inital_page.dart';
+import 'package:finance_app/layers/presentation/ui/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({ Key? key }) : super(key: key);
@@ -17,7 +18,7 @@ class _AuthCheckState extends State<AuthCheck> {
 
   @override
   void initState() {
-    _authenticationCubit = context.read<AuthenticationCubit>();
+    _authenticationCubit = GetIt.I.get<AuthenticationCubit>();
     _authenticationCubit.appStarted();
     super.initState();
   }

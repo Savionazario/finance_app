@@ -1,7 +1,8 @@
-import 'package:finance_app/cubits/authentication/authentication_cubit.dart';
-import 'package:finance_app/pages/history_page.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/pages/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _authenticationCubit = context.read<AuthenticationCubit>();
+    _authenticationCubit = GetIt.I.get<AuthenticationCubit>();
     super.initState();
   }
 
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       SizedBox(
                         height: 130,
-                        width: 176,
+                        width: 160,
                         child: Card(
                           elevation: 0,
                           shape: OutlineInputBorder(
@@ -191,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(
                         height: 130,
-                        width: 176,
+                        width: 160,
                         child: Card(
                           elevation: 0,
                           shape: OutlineInputBorder(
@@ -255,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 18.0, vertical: 10.0),
+                      horizontal: 16.0, vertical: 10.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,7 +1,9 @@
-import 'package:finance_app/cubits/login/login_cubit.dart';
-import 'package:finance_app/cubits/login/login_state.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/login/login_state.dart';
+import 'package:finance_app/layers/presentation/ui/pages/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    _loginCubit = context.read<LoginCubit>();
+    _loginCubit = GetIt.I.get<LoginCubit>();
     super.initState();
   }
 
@@ -68,37 +70,93 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Column(
                 children: [
-                  SizedBox(
-                    height: 54,
-                    width: 340,
-                    child: TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        // icon: Icon(Icons.person),
-                        labelText: 'Email',
-                        hintText: 'Digite seu email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Text(
+                          "Email",
+                          style: TextStyle(),
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: SizedBox(
-                      height: 54,
-                      width: 340,
-                      child: TextFormField(
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          // icon: Icon(Icons.person),
-                          labelText: 'Senha',
-                          hintText: 'Digite sua senha',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
+                      SizedBox(
+                        height: 50,
+                        width: 340,
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            // icon: Icon(Icons.person),
+                            // labelText: 'Email',
+                            hintText: 'Digite seu email',
+                            hintStyle: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.grey[300]!,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.grey[300]!,
+                              ),
+                            ),
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
+                          child: Text(
+                            "Senha",
+                            style: TextStyle(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: 340,
+                          child: TextFormField(
+                            controller: _passwordController,
+                            decoration: InputDecoration(
+                              // icon: Icon(Icons.person),
+                              // labelText: 'Senha',
+                              hintText: 'Digite sua senha',
+                              hintStyle: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[300]!,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[300]!,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   BlocBuilder<LoginCubit, LoginState>(
@@ -113,6 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                             child: TextButton(
                               style: TextButton.styleFrom(
                                 backgroundColor: Color(0xFF0E3AAA),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                               child: const Text(
                                 "Entrar",
@@ -120,11 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 print("Email: ${_emailController.text}");
-                                print("Smail: ${_passwordController.text}");
-        
-                                _loginCubit.signIn(
+                                print("Senha: ${_passwordController.text}");
+
+                                await _loginCubit.signIn(
                                     email: _emailController.text,
                                     password: _passwordController.text);
                               },
@@ -136,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                         _onWidgetDidBuild(() {
                           _showUserInvalidDialog(context, state.errorMessage);
                         });
-        
+
                         return Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: SizedBox(
@@ -152,11 +213,11 @@ class _LoginPageState extends State<LoginPage> {
                                   color: Colors.white,
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 print("Email: ${_emailController.text}");
                                 print("Smail: ${_passwordController.text}");
-        
-                                _loginCubit.signIn(
+
+                                await _loginCubit.signIn(
                                     email: _emailController.text,
                                     password: _passwordController.text);
                               },
@@ -164,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         );
                       }
-        
+
                       return const Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: Center(child: CircularProgressIndicator()),
@@ -186,15 +247,25 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Cadastre-se.",
-                          style: GoogleFonts.roboto(
-                            textStyle: TextStyle(
-                              color: Color(0xFF0E3AAA),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
+                        InkWell(
+                          child: Text(
+                            "Cadastre-se.",
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                color: Color(0xFF0E3AAA),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignUpPage(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
