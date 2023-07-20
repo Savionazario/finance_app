@@ -1,3 +1,5 @@
+import 'package:finance_app/layers/domain/entities/transaction_entity.dart';
+
 class UserEntity {
   String? uid;
   String? name;
@@ -5,6 +7,7 @@ class UserEntity {
   String? password;
   double? expense;
   double? income;
+  List<TransactionEntity>? transactions;
 
   UserEntity({
     this.uid,
@@ -13,5 +16,6 @@ class UserEntity {
     this.password,
     this.expense,
     this.income,
+    this.transactions,
   });
 }

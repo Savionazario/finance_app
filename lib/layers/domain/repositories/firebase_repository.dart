@@ -9,5 +9,7 @@ abstract class FirebaseRepository {
 
   Future<dynamic> signOut();
 
+  Future<UserEntity> getUpdatedUser();
+
   bool isSignIn();
 }

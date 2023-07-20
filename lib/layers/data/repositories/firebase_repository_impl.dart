@@ -5,7 +5,7 @@ import 'package:finance_app/layers/domain/repositories/firebase_repository.dart'
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseRepositoryImpl implements FirebaseRepository {
-  final AuthenticationDataSource _firebaseDataSource;
+  final UserDataSource _firebaseDataSource;
   late final User? _firebaseUser;
   var userDto;
   FirebaseRepositoryImpl(this._firebaseDataSource,){
@@ -20,6 +20,7 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   }) async {
     try {
       var user = await _firebaseDataSource.createUserWithEmailAndPassword(name: name, email: email, password: password);
+      userDto = user;
       return user;
     } catch (e) {
       throw Exception("Algo deu errado em signUpUser no repository!");
@@ -40,6 +41,7 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   }) async {
     try {
       var user = await _firebaseDataSource.signInUserWithEmailAndPassword(email: email, password: password);
+      userDto = user;
       return user;
     } catch (e) {
       // throw Exception("Algo deu errado em signInUser no repository!");
@@ -61,11 +63,13 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
     return true;
   }
 
-  // Future<UserDto> getUserData() async{
-  //   try {
-
-  //   } catch (e) {
-      
-  //   }
-  // }
+  @override
+  Future<UserDto> getUpdatedUser() async{
+    try {
+      UserDto user = await _firebaseDataSource.getUpdatedUser(_firebaseUser!.uid);
+      return user;
+    } catch (e) {
+      throw Exception("Algo deu errado em getUserData no repository: $e");
+    }
+  }
 }
