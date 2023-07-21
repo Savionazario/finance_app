@@ -10,7 +10,7 @@ class FirebaseDataSourceImpl implements UserDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<UserDto> createUserWithEmailAndPassword({
+  Future<String> createUserWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -20,28 +20,28 @@ class FirebaseDataSourceImpl implements UserDataSource {
 
     await createUserFieldsInFirestore(name: name, email: email, password: password, userUid: userUid);
 
-    var userdata = await _getUserFromCollection(userUid);
-    var transactionsList = await _getUserTransactionsFromCollection(userUid);
+    // var userdata = await _getUserFromCollection(userUid);
+    // var transactionsList = await _getUserTransactionsFromCollection(userUid);
 
-    UserDto userDto = UserDto.fromJson(userdata.data(), transactionsList);
+    // UserDto userDto = UserDto.fromJson(userdata.data(), transactionsList);
 
-    return userDto;
+    return userUid;
   }
 
   @override
-  Future<UserDto> signInUserWithEmailAndPassword({
+  Future<String> signInUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     var response = await _auth.signInWithEmailAndPassword(email: email, password: password);
     var userUid = response.user!.uid;
 
-    var userdata = await _getUserFromCollection(userUid);
-    var transactionsList = await _getUserTransactionsFromCollection(userUid);
+    // var userdata = await _getUserFromCollection(userUid);
+    // var transactionsList = await _getUserTransactionsFromCollection(userUid);
 
-    UserDto userDto = UserDto.fromJson(userdata.data(), transactionsList);
+    // UserDto userDto = UserDto.fromJson(userdata.data(), transactionsList);
 
-    return userDto;
+    return userUid;
   }
 
   @override
@@ -50,8 +50,8 @@ class FirebaseDataSourceImpl implements UserDataSource {
   }
 
   @override
-  User? getCurrentUser() {
-    return  _auth.currentUser;
+  String? getCurrentUser() {
+    return  _auth.currentUser?.uid;
   }
 
   Future<dynamic> _getUserFromCollection(String userUid) async {
@@ -60,6 +60,16 @@ class FirebaseDataSourceImpl implements UserDataSource {
 
   Future<dynamic> _getUserTransactionsFromCollection(String userUid) async {
     QuerySnapshot querySnapshot = await _firestore.collection("users").doc(userUid).collection("transactions").get();
+
+    var transactionsList = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    return transactionsList;
+  }
+
+  Future<dynamic> _getUserTodayTransactionsFromCollection(String userUid) async {
+    final startDateTofilter = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final endDateTofilter = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+    QuerySnapshot querySnapshot = await _firestore.collection("users").doc(userUid).collection("transactions").where("date", isGreaterThanOrEqualTo: startDateTofilter).where("date", isLessThan: endDateTofilter).get();
 
     var transactionsList = querySnapshot.docs.map((doc) => doc.data()).toList();
 
@@ -81,11 +91,20 @@ class FirebaseDataSourceImpl implements UserDataSource {
   @override
   Future<UserDto> getUpdatedUser(String userUid) async{
     var userdata = await _getUserFromCollection(userUid);
-    var transactionsList = await _getUserTransactionsFromCollection(userUid);
+    var transactionsList = await _getUserTodayTransactionsFromCollection(userUid);
 
     UserDto userDto = UserDto.fromJson(userdata.data(), transactionsList);
 
     return userDto;
+  }
+  
+  @override
+  bool isUserSignIn() {
+    if(_auth.currentUser != null){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   

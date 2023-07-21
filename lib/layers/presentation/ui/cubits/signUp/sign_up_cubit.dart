@@ -14,16 +14,30 @@ class SignUpCubit extends Cubit<SignUpState> {
     required String email,
     required String password,
   }) async {
-    try {
-      emit(SignUpLoadingState());
+    emit(SignUpLoadingState());
 
-      await _signUpUseCase(name: name, email: email, password: password);
+    var result = await _signUpUseCase(name: name, email: email, password: password);
 
-      _authenticationCubit.loggedIn();
-
+    result.fold(
+      (error) {
+        emit(SignUpErrorState(errorMessage: error.errorMessage));
+      },
+      (sucess) {
+        _authenticationCubit.loggedIn();
       emit(SignUpSucessfulState());
-    } catch (e) {
-      emit(SignUpErrorState(errorMessage: "Algo deu errado no SignUp"));
-    }
+      },
+    );
+
+    // try {
+    //   emit(SignUpLoadingState());
+
+    //   await _signUpUseCase(name: name, email: email, password: password);
+
+    //   _authenticationCubit.loggedIn();
+
+    //   emit(SignUpSucessfulState());
+    // } catch (e) {
+    //   emit(SignUpErrorState(errorMessage: "Algo deu errado no SignUp"));
+    // }
   }
 }

@@ -180,12 +180,12 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
-                                  // _authenticationCubit.signOut();
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ShimmerHomePage()));
+                                  _authenticationCubit.signOut();
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             ShimmerHomePage()));
                                 },
                               ),
                             ),
@@ -228,12 +228,12 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Text(
-                              "${(state.userEntity.income! - state.userEntity.expense!).toStringAsFixed(2)}",
-                              style: GoogleFonts.nunitoSans(
+                              "R\$${(state.userEntity.income! - state.userEntity.expense!).toStringAsFixed(2)}",
+                              style: GoogleFonts.montserrat(
                                 textStyle: const TextStyle(
-                                  fontSize: 26,
+                                  fontSize: 24,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
@@ -288,11 +288,10 @@ class _HomePageState extends State<HomePage> {
                                       )),
                                     ),
                                     Text(
-                                      state.userEntity.income!
-                                          .toStringAsFixed(2),
+                                      "R\$${state.userEntity.income!.toStringAsFixed(2)}",
                                       style: GoogleFonts.montserrat(
                                           textStyle: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         color: Colors.black,
                                         fontWeight: FontWeight.w600,
                                       )),
@@ -340,11 +339,10 @@ class _HomePageState extends State<HomePage> {
                                       )),
                                     ),
                                     Text(
-                                      state.userEntity.expense!
-                                          .toStringAsFixed(2),
+                                      "R\$${state.userEntity.expense!.toStringAsFixed(2)}",
                                       style: GoogleFonts.montserrat(
                                           textStyle: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         color: Colors.black,
                                         fontWeight: FontWeight.w600,
                                       )),
@@ -413,7 +411,7 @@ class _HomePageState extends State<HomePage> {
                                   padding: const EdgeInsets.only(top: 26.0),
                                   child: Text(
                                     "Hoje",
-                                    style: GoogleFonts.poppins(
+                                    style: GoogleFonts.montserrat(
                                       textStyle: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey,
@@ -423,153 +421,191 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 // getShimmerListEffect(),
-
-                                ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: transactionsList.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    var transactionType =
-                                        transactionsList[index].type;
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Container(
-                                        width: 200,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: colorBackGround,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width: 50,
-                                                    height: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              14),
-                                                    ),
-                                                    child: Icon(
-                                                      Icons
-                                                          .shopping_bag_outlined,
-                                                      color: middleBlue,
-                                                      size: 26,
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 14.0),
-                                                    child: Column(
+                                transactionsList.isNotEmpty
+                                    ? ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: transactionsList.length,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          var transactionType =
+                                              transactionsList[index].type;
+                                          return Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8.0),
+                                            child: Container(
+                                              width: 200,
+                                              height: 80,
+                                              decoration: BoxDecoration(
+                                                color: colorBackGround,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .center,
+                                                              .spaceBetween,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
-                                                              .start,
+                                                              .center,
                                                       children: [
-                                                        Text(
-                                                          "${transactionsList[index].category}",
-                                                          style: GoogleFonts
-                                                              .poppins(
-                                                            textStyle:
-                                                                TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
+                                                        Container(
+                                                          width: 50,
+                                                          height: 50,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        14),
+                                                          ),
+                                                          child: Icon(
+                                                            Icons
+                                                                .shopping_bag_outlined,
+                                                            color: middleBlue,
+                                                            size: 26,
                                                           ),
                                                         ),
-                                                        Text(
-                                                          "${transactionsList[index].description}",
-                                                          style: GoogleFonts
-                                                              .poppins(
-                                                            textStyle:
-                                                                TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 14.0),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                "${transactionsList[index].category}",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .poppins(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                "${transactionsList[index].description}",
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .poppins(
+                                                                  textStyle:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ],
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 16.0),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                        transactionType ==
-                                                                "expense"
-                                                            ? "- ${transactionsList[index].value.toStringAsFixed(2)}"
-                                                            : "+ ${transactionsList[index].value.toStringAsFixed(2)}",
-                                                        style:
-                                                            GoogleFonts.poppins(
-                                                          textStyle: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color:
-                                                                transactionType ==
-                                                                        "expense"
-                                                                    ? Colors.red
-                                                                    : Colors
-                                                                        .green,
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 16.0),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(
+                                                              transactionType ==
+                                                                      "expense"
+                                                                  ? "- ${transactionsList[index].value.toStringAsFixed(2)}"
+                                                                  : "+ ${transactionsList[index].value.toStringAsFixed(2)}",
+                                                              style: GoogleFonts
+                                                                  .poppins(
+                                                                textStyle:
+                                                                    TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color: transactionType ==
+                                                                          "expense"
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .green,
+                                                                ),
+                                                              )),
+                                                          Text(
+                                                            "16/04",
+                                                            style: GoogleFonts
+                                                                .poppins(
+                                                              textStyle:
+                                                                  TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color:
+                                                                    Colors.grey,
+                                                              ),
+                                                            ),
                                                           ),
-                                                        )),
-                                                    Text(
-                                                      "16/04",
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        textStyle: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.grey,
-                                                        ),
+                                                        ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                            ],
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : Expanded(
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 100.0),
+                                            child: Text(
+                                              "Você ainda não possui transações hoje!",
+                                              style: GoogleFonts.montserrat(
+                                                textStyle: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  // color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
                               ],
                             ),
                           ),
