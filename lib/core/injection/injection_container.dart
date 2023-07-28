@@ -1,9 +1,11 @@
 import 'package:finance_app/layers/data/datasources/authentication_datasource.dart';
-import 'package:finance_app/layers/data/datasources/firebase/firebase_datasource_impl.dart';
-import 'package:finance_app/layers/data/repositories/firebase_repository_impl.dart';
-import 'package:finance_app/layers/domain/repositories/firebase_repository.dart';
-import 'package:finance_app/layers/domain/usecases/getUpdatedUser/get_updated_user_usecase.dart';
-import 'package:finance_app/layers/domain/usecases/getUpdatedUser/get_updated_user_usecase_impl.dart';
+import 'package:finance_app/layers/data/datasources/firebase/firebase_authentication_datasource_impl.dart';
+import 'package:finance_app/layers/data/repositories/user_repository_impl.dart';
+import 'package:finance_app/layers/domain/repositories/user_repository.dart';
+import 'package:finance_app/layers/domain/usecases/getUserWithFiltered_transactions/get_user_with_filtered_transactions_usecase.dart';
+import 'package:finance_app/layers/domain/usecases/getUserWithFiltered_transactions/get_user_with_filtered_transactions_usecase_impl.dart';
+import 'package:finance_app/layers/domain/usecases/getUserBydate/get_user_by_date_usecase.dart';
+import 'package:finance_app/layers/domain/usecases/getUserBydate/get_user_by_date_usecase_impl.dart';
 import 'package:finance_app/layers/domain/usecases/isSignIn/is_sign_in_usecase.dart';
 import 'package:finance_app/layers/domain/usecases/isSignIn/is_sign_in_usecase_impl.dart';
 import 'package:finance_app/layers/domain/usecases/signIn/sign_in_with_email_and_password_usecase.dart';
@@ -16,6 +18,7 @@ import 'package:finance_app/layers/presentation/ui/cubits/authentication/authent
 import 'package:finance_app/layers/presentation/ui/cubits/getUserDetails/get_user_details_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/signUp/sign_up_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/userTransactions/user_transactions_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class InjectionContainer {
@@ -25,13 +28,15 @@ class InjectionContainer {
     //! Authentication
     // ? registerLazySingleton -> utiliza o patrão sigleton e só é criado quando é chamado a primeira vez
     // datasouces
-    getIt.registerLazySingleton<UserDataSource>(
-      () => FirebaseDataSourceImpl(),
+    getIt.registerLazySingleton<AuthenticationDataSource>(
+      () => FirebaseAuthenticationDataSourceImpl(),
     );
+
     // repositories
-    getIt.registerLazySingleton<FirebaseRepository>(
-      () => FirebaseRepositoryImpl(getIt()),
+    getIt.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(getIt()),
     );
+
     // usecases
     getIt.registerLazySingleton<SignInWithEmailAndPasswordUseCase>(
       () => SignInWithEmailAndPasswordUseCaseImpl(getIt()),
@@ -45,6 +50,7 @@ class InjectionContainer {
     getIt.registerLazySingleton<IsSignInUseCase>(
       () => IsSignInUseCaseImpl(getIt()),
     );
+    
 
     // cubits
     getIt.registerLazySingleton<AuthenticationCubit>(
@@ -68,12 +74,24 @@ class InjectionContainer {
 
     //! User Details
     // usecases
-    getIt.registerLazySingleton<getUpdatedUserUsecase>(
-      () => getUpdatedUserUsecaseImpl(getIt()),
+    getIt.registerLazySingleton<GetUserWithFilteredTransactionsUsecase>(
+      () => GetUserWithFilteredTransactionsUsecaseImpl(getIt()),
     );
+    getIt.registerLazySingleton<GetUserByDateUseCase>(
+      () => GetUserByDateUseCaseImpl(getIt()),
+    );
+    // getIt.registerLazySingleton<GetUserWithFilteredTransactionsUsecase>(
+    //   () => GetUserWithFilteredTransactionsUsecaseImpl(getIt()),
+    // );
+
     // cubits
     getIt.registerLazySingleton<GetUserDetailsCubit>(
       () => GetUserDetailsCubit(
+        getIt(),
+      ),
+    );
+    getIt.registerLazySingleton<UserTransactionsCubit>(
+      () => UserTransactionsCubit(
         getIt(),
       ),
     );

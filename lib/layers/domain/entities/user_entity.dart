@@ -18,4 +18,25 @@ class UserEntity {
     this.income,
     this.transactions,
   });
+
+  // Implementação do método copyWith
+  UserEntity copyWith({
+    String? uid,
+    String? name,
+    String? email,
+    String? password,
+    double? expense,
+    double? income,
+    List<TransactionEntity>? transactions,
+  }) {
+    return UserEntity(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      password: password ?? this.password,
+      expense: expense ?? this.expense,
+      income: income ?? this.income,
+      transactions: transactions ?? this.transactions,
+    );
+  }
 }

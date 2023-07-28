@@ -5,7 +5,7 @@ import 'package:finance_app/layers/data/datasources/authentication_datasource.da
 import 'package:finance_app/layers/data/dto/user_dto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class FirebaseDataSourceImpl implements UserDataSource {
+class FirebaseAuthenticationDataSourceImpl implements AuthenticationDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -66,7 +66,7 @@ class FirebaseDataSourceImpl implements UserDataSource {
     return transactionsList;
   }
 
-  Future<dynamic> _getUserTodayTransactionsFromCollection(String userUid) async {
+  Future<dynamic> _getUserTransactionsByDateFromCollection(String userUid) async {
     final startDateTofilter = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     final endDateTofilter = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
     QuerySnapshot querySnapshot = await _firestore.collection("users").doc(userUid).collection("transactions").where("date", isGreaterThanOrEqualTo: startDateTofilter).where("date", isLessThan: endDateTofilter).get();
@@ -91,7 +91,7 @@ class FirebaseDataSourceImpl implements UserDataSource {
   @override
   Future<UserDto> getUpdatedUser(String userUid) async{
     var userdata = await _getUserFromCollection(userUid);
-    var transactionsList = await _getUserTodayTransactionsFromCollection(userUid);
+    var transactionsList = await _getUserTransactionsFromCollection(userUid);
 
     UserDto userDto = UserDto.fromJson(userdata.data(), transactionsList);
 

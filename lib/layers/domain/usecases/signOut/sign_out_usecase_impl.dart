@@ -1,12 +1,12 @@
-import 'package:finance_app/layers/domain/repositories/firebase_repository.dart';
+import 'package:finance_app/layers/domain/repositories/user_repository.dart';
 import 'package:finance_app/layers/domain/usecases/signOut/sign_out_usecase.dart';
 
 class SignOutUseCaseImpl implements SignOutUseCase {
-  final FirebaseRepository _firebaseRepository;
-  SignOutUseCaseImpl(this._firebaseRepository);
+  final UserRepository _userRepository;
+  SignOutUseCaseImpl(this._userRepository);
 
   @override
   Future<void> call() async{
-    await _firebaseRepository.signOut();
+    await _userRepository.signOut();
   }
 }

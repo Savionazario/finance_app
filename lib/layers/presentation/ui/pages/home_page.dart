@@ -1,13 +1,15 @@
 import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/getUserDetails/get_user_details_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/getUserDetails/get_user_details_state.dart';
-import 'package:finance_app/layers/presentation/ui/pages/history_page.dart';
+import 'package:finance_app/layers/presentation/ui/pages/transaction_history_page.dart';
 import 'package:finance_app/layers/presentation/ui/shimmers/shimmer_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../constants/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,25 +19,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var ligtherBlue = Color(0xFF4365AA);
-  var middleBlue = Color(0xFF234F9D);
-  var darkerBlue = Color(0xFF233C65);
-  var colorBackGround = Color(0xFFF3F5F9);
-  var purple = Color(0xFF2E2273);
-  var darkPurple = Color.fromARGB(255, 92, 64, 211);
-  var darkPurpleTwo = Color.fromARGB(255, 80, 64, 211);
-  var darkPurpleThree = Color.fromARGB(255, 70, 65, 211);
-  var blue = Color.fromARGB(255, 14, 58, 170);
-  var bluetwo = Color.fromARGB(255, 14, 68, 170);
-  var bluethree = Color.fromARGB(255, 14, 78, 170);
-  var areia = Color.fromARGB(255, 233, 177, 121);
+  // var ligtherBlue = Color(0xFF4365AA);
+  // var middleBlue = Color(0xFF234F9D);
+  // var darkerBlue = Color(0xFF233C65);
+  // var colorBackGround = Color(0xFFF3F5F9);
+  // var purple = Color(0xFF2E2273);
+  // var darkPurple = Color.fromARGB(255, 92, 64, 211);
+  // var darkPurpleTwo = Color.fromARGB(255, 80, 64, 211);
+  // var darkPurpleThree = Color.fromARGB(255, 70, 65, 211);
+  // var blue = Color.fromARGB(255, 14, 58, 170);
+  // var bluetwo = Color.fromARGB(255, 14, 68, 170);
+  // var bluethree = Color.fromARGB(255, 14, 78, 170);
+  // var areia = Color.fromARGB(255, 233, 177, 121);
 
   double containerWidth = 300.0;
   double containerHeight = 10.0;
 
   final screens = [
     HomePage(),
-    HistoryPage(),
+    TransactionHistoryPage(),
   ];
 
   int paginaAtual = 0;
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _authenticationCubit = GetIt.I.get<AuthenticationCubit>();
     _getUserDetailsCubit = GetIt.I.get<GetUserDetailsCubit>();
-    _getUserDetailsCubit.loadUserDetails();
+    _getUserDetailsCubit.loadUserDetails(date: DateTime.now());
     super.initState();
   }
 

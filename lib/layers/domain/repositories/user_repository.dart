@@ -3,7 +3,7 @@ import 'package:finance_app/core/errors/failure.dart';
 
 import '../entities/user_entity.dart';
 
-abstract class FirebaseRepository {
+abstract class UserRepository {
   // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<Either<Failure, Unit>> createUserWithEmailAndPassword({required String name, required String email, required String password});

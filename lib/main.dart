@@ -1,8 +1,8 @@
 import 'package:finance_app/core/injection/injection_container.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
-import 'package:finance_app/layers/data/datasources/firebase/firebase_datasource_impl.dart';
-import 'package:finance_app/layers/data/repositories/firebase_repository_impl.dart';
+import 'package:finance_app/layers/data/datasources/firebase/firebase_authentication_datasource_impl.dart';
+import 'package:finance_app/layers/data/repositories/user_repository_impl.dart';
 import 'package:finance_app/layers/domain/usecases/isSignIn/is_sign_in_usecase_impl.dart';
 import 'package:finance_app/layers/domain/usecases/signIn/sign_in_with_email_and_password_usecase.dart';
 import 'package:finance_app/layers/domain/usecases/signIn/sign_in_with_email_and_password_usecase_impl.dart';
@@ -30,25 +30,25 @@ void main() async {
     MultiProvider(
       providers: [
         Provider(create: (context) => AuthService()),
-        Provider(create: (context) => FirebaseDataSourceImpl()),
+        Provider(create: (context) => FirebaseAuthenticationDataSourceImpl()),
         Provider(
-          create: (context) => FirebaseRepositoryImpl(
-            context.read<FirebaseDataSourceImpl>(),
+          create: (context) => UserRepositoryImpl(
+            context.read<FirebaseAuthenticationDataSourceImpl>(),
           ),
         ),
         Provider(
           create: (context) => IsSignInUseCaseImpl(
-            context.read<FirebaseRepositoryImpl>(),
+            context.read<UserRepositoryImpl>(),
           ),
         ),
         Provider(
           create: (context) => SignInWithEmailAndPasswordUseCaseImpl(
-            context.read<FirebaseRepositoryImpl>(),
+            context.read<UserRepositoryImpl>(),
           ),
         ),
         Provider(
           create: (context) => SignOutUseCaseImpl(
-            context.read<FirebaseRepositoryImpl>(),
+            context.read<UserRepositoryImpl>(),
           ),
         ),
         BlocProvider(

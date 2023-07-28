@@ -4,18 +4,19 @@ import 'package:dartz/dartz.dart';
 import 'package:finance_app/layers/data/datasources/authentication_datasource.dart';
 import 'package:finance_app/layers/data/dto/user_dto.dart';
 import 'package:finance_app/layers/domain/entities/user_entity.dart';
-import 'package:finance_app/layers/domain/repositories/firebase_repository.dart';
+import 'package:finance_app/layers/domain/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/errors/failure.dart';
 
-class FirebaseRepositoryImpl implements FirebaseRepository {
-  final UserDataSource _firebaseDataSource;
+class UserRepositoryImpl implements UserRepository {
+  final AuthenticationDataSource _authenticationDatasource;
   // late final User? _firebaseUser;
   // var userDto;
   var userId;
-  FirebaseRepositoryImpl(this._firebaseDataSource,){
-    userId = _firebaseDataSource.getCurrentUser();
+  var cachedUser;
+  UserRepositoryImpl(this._authenticationDatasource,){
+    userId = _authenticationDatasource.getCurrentUser();
   }
 
   @override
@@ -25,7 +26,7 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
     required String password,
   }) async {
     try {
-      userId = await _firebaseDataSource.createUserWithEmailAndPassword(name: name, email: email, password: password);
+      userId = await _authenticationDatasource.createUserWithEmailAndPassword(name: name, email: email, password: password);
       return Right(unit);
     } catch (e) {
       return Left(Failure(errorMessage: 'Erro ao criar conta, tente novamente.'));
@@ -45,7 +46,7 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
     required String password,
   }) async {
     try {
-      userId = await _firebaseDataSource.signInUserWithEmailAndPassword(email: email, password: password);
+      userId = await _authenticationDatasource.signInUserWithEmailAndPassword(email: email, password: password);
       return Right(unit);
     }on FirebaseAuthException catch (e) {
       // throw Exception("Algo deu errado em signInUser no repository: $e");
@@ -64,12 +65,13 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
 
   @override
   Future signOut() async {
-    await _firebaseDataSource.signOut();
+    await _authenticationDatasource.signOut();
+    invalidateCachedUser();
   }
   
   @override
   bool isSignIn() {
-    return _firebaseDataSource.isUserSignIn();
+    return _authenticationDatasource.isUserSignIn();
     // if(_firebaseUser == null){
     //   return false;
     // }
@@ -77,12 +79,21 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   }
 
   @override
-  Future<UserDto> getUpdatedUser() async{
+  Future<UserEntity> getUpdatedUser() async{
     try {
-      UserDto user = await _firebaseDataSource.getUpdatedUser(userId);
+      if (cachedUser != null) {
+        return cachedUser!;
+      }
+      UserEntity user = await _authenticationDatasource.getUpdatedUser(userId);
+      cachedUser = user;
       return user;
     } catch (e) {
       throw Exception("Algo deu errado em getUserData no repository: $e");
+      // return Left(Failure(errorMessage: "Algo deu errado em getUserData no repository: $e"));
     }
+  }
+
+  void invalidateCachedUser() {
+    cachedUser = null;
   }
 }

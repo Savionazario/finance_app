@@ -115,7 +115,7 @@ class _ShimmerHomePageState extends State<ShimmerHomePage> {
                                   children: [
                                     Container(
                                       height: 10,
-                                      width: 260,
+                                      width: size.width * 0.63,
                                       color: Colors.grey,
                                     ),
                                     const SizedBox(
@@ -123,7 +123,7 @@ class _ShimmerHomePageState extends State<ShimmerHomePage> {
                                     ),
                                     Container(
                                       height: 10,
-                                      width: 200,
+                                      width: size.width * 0.5,
                                       color: Colors.grey,
                                     )
                                   ],

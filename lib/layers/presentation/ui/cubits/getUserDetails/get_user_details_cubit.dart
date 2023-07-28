@@ -1,23 +1,31 @@
-import 'package:finance_app/layers/domain/entities/user_entity.dart';
-import 'package:finance_app/layers/domain/usecases/getUpdatedUser/get_updated_user_usecase.dart';
+import 'package:finance_app/layers/domain/usecases/getUserBydate/get_user_by_date_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'get_user_details_state.dart';
 
-class GetUserDetailsCubit extends Cubit<GetUserDetailsState>{
-  final getUpdatedUserUsecase _getUpdatedUserUsecase;
-  GetUserDetailsCubit(this._getUpdatedUserUsecase) : super(GetUserDetailsInitialState());
+class GetUserDetailsCubit extends Cubit<GetUserDetailsState> {
+  final GetUserByDateUseCase _getUserByDateUseCase;
+  GetUserDetailsCubit(this._getUserByDateUseCase)
+      : super(GetUserDetailsInitialState());
 
-  void loadUserDetails() async{
+  void loadUserDetails({required DateTime date}) async {
     try {
       emit(GetUserDetailsLoadingState());
 
-      UserEntity user = await _getUpdatedUserUsecase();
+      var result = await _getUserByDateUseCase(date: date);
 
-      emit(GetUserDetailsSucessfulState(userEntity: user));
+      result.fold(
+        (failure) {
+          emit(GetUserDetailsErrorState(errorMessage: failure.errorMessage));
+        },
+        (user) {
+          emit(GetUserDetailsSucessfulState(userEntity: user));
+        },
+      );
+
+      // emit(GetUserDetailsSucessfulState(userEntity: user));
     } catch (e) {
       emit(GetUserDetailsErrorState(errorMessage: e.toString()));
     }
   }
-
 }
