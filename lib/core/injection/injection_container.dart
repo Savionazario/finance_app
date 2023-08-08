@@ -14,11 +14,13 @@ import 'package:finance_app/layers/domain/usecases/signOut/sign_out_usecase.dart
 import 'package:finance_app/layers/domain/usecases/signOut/sign_out_usecase_impl.dart';
 import 'package:finance_app/layers/domain/usecases/signUp/sign_up_usecase.dart';
 import 'package:finance_app/layers/domain/usecases/signUp/sign_up_usecase_impl.dart';
+import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectPaymentMethod/select_payment_method_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectTransactionCategory/select_transaction_category_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/getUserDetails/get_user_details_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/signUp/sign_up_cubit.dart';
-import 'package:finance_app/layers/presentation/ui/cubits/userTransactions/user_transactions_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/transactionsList/transactions_list_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 class InjectionContainer {
@@ -90,10 +92,16 @@ class InjectionContainer {
         getIt(),
       ),
     );
-    getIt.registerLazySingleton<UserTransactionsCubit>(
-      () => UserTransactionsCubit(
+    getIt.registerLazySingleton<TransactionListCubit>(
+      () => TransactionListCubit(
         getIt(),
       ),
+    );
+    getIt.registerLazySingleton<SelectTransactionCategoryCubit>(
+      () => SelectTransactionCategoryCubit(),
+    );
+    getIt.registerLazySingleton<SelectPaymentMethodCubit>(
+      () => SelectPaymentMethodCubit(),
     );
   }
 }

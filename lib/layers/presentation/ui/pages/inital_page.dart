@@ -1,3 +1,4 @@
+import 'package:finance_app/layers/presentation/ui/createTransactionFeature/create_transaction_page.dart';
 import 'package:finance_app/layers/presentation/ui/pages/transaction_history_page.dart';
 import 'package:finance_app/layers/presentation/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +181,7 @@ class _InitalPageState extends State<InitalPage> {
                         ),
                         Text(
                           "Home",
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.nunitoSans(
                             textStyle: TextStyle(
                               color:
                                   paginaAtual == 0 ? darkerBlue : Colors.grey,
@@ -202,17 +203,21 @@ class _InitalPageState extends State<InitalPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(
-                          "assets/cash_icon.jpg",
-                          height: 28,
-                          width: 28,
+                        // Image.asset(
+                        //   "assets/cash_icon.jpg",
+                        //   height: 28,
+                        //   width: 28,
+                        //   color:
+                        //       paginaAtual == 1 ? darkerBlue : Colors.blueGrey,
+                        // ),
+                        Icon(
+                          Icons.format_list_bulleted_rounded,
                           color:
                               paginaAtual == 1 ? darkerBlue : Colors.blueGrey,
                         ),
-                        // Icon(Icons.cash_)
                         Text(
                           "Histórico",
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.nunitoSans(
                             textStyle: TextStyle(
                               color:
                                   paginaAtual == 1 ? darkerBlue : Colors.grey,
@@ -303,7 +308,14 @@ class _InitalPageState extends State<InitalPage> {
                                         size: 20,
                                       ),
                                       onPressed: () {
-                                        Navigator.pop(context);
+                                        // Navigator.pop(context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CreateTransactionPage(),
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),

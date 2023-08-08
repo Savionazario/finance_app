@@ -1,5 +1,5 @@
-import 'package:finance_app/layers/presentation/ui/cubits/userTransactions/user_transactions_cubit.dart';
-import 'package:finance_app/layers/presentation/ui/cubits/userTransactions/user_transactions_state.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/transactionsList/transactions_list_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/transactionsList/transactions_list_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -16,11 +16,11 @@ class TransactionHistoryPage extends StatefulWidget {
 }
 
 class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
-  late final UserTransactionsCubit _userTransactionsCubit;
+  late final TransactionListCubit _userTransactionsCubit;
 
   @override
   void initState() {
-    _userTransactionsCubit = GetIt.I.get<UserTransactionsCubit>();
+    _userTransactionsCubit = GetIt.I.get<TransactionListCubit>();
     _userTransactionsCubit.loadUserWithFilteredTransactions();
     super.initState();
   }
@@ -29,22 +29,22 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: BlocBuilder<UserTransactionsCubit, UserTransactionsState>(
+      child: BlocBuilder<TransactionListCubit, TransactionListState>(
         bloc: _userTransactionsCubit,
         builder: (context, state) {
-          if (state is UserTransactionsInitialState) {
+          if (state is TransactionListInitialState) {
             return Center(child: Text("Lista Vazia!!"));
           }
-          if (state is UserTransactionsLoadingState) {
+          if (state is TransactionListLoadingState) {
             return ShimmerHomePage();
           }
 
-          if (state is UserTransactionsErrorState) {
+          if (state is TransactionListErrorState) {
             return Center(
                 child: Text("Algo deu errado: ${state.errorMessage}"));
           }
 
-          state = state as UserTransactionsLoadedState;
+          state = state as TransactionListLoadedState;
           List transactionsList = state.userEntity.transactions!;
           return Scaffold(
             // resizeToAvoidBottomInset: false,

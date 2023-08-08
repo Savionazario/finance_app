@@ -1,25 +1,25 @@
 import 'package:finance_app/layers/domain/usecases/getUserWithFiltered_transactions/get_user_with_filtered_transactions_usecase.dart';
-import 'package:finance_app/layers/presentation/ui/cubits/userTransactions/user_transactions_state.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/transactionsList/transactions_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UserTransactionsCubit extends Cubit<UserTransactionsState> {
+class TransactionListCubit extends Cubit<TransactionListState> {
   GetUserWithFilteredTransactionsUsecase
       _getUserWithFilteredTransactionsUsecase;
-  UserTransactionsCubit(this._getUserWithFilteredTransactionsUsecase)
-      : super(UserTransactionsInitialState());
+  TransactionListCubit(this._getUserWithFilteredTransactionsUsecase)
+      : super(TransactionListInitialState());
 
   void loadUserWithFilteredTransactions({String? searchText}) async {
-    emit(UserTransactionsLoadingState());
+    emit(TransactionListLoadingState());
 
     var result =
         await _getUserWithFilteredTransactionsUsecase(searchText: searchText);
 
     result.fold(
       (failure) {
-        emit(UserTransactionsErrorState(errorMessage: failure.errorMessage));
+        emit(TransactionListErrorState(errorMessage: failure.errorMessage));
       },
       (userEntity) {
-        emit(UserTransactionsLoadedState(userEntity: userEntity));
+        emit(TransactionListLoadedState(userEntity: userEntity));
       },
     );
   }
