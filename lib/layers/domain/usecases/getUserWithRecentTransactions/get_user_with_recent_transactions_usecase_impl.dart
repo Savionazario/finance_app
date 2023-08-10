@@ -1,32 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finance_app/layers/domain/entities/transaction_entity.dart';
 import 'package:finance_app/layers/domain/entities/user_entity.dart';
 import 'package:finance_app/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:finance_app/layers/domain/repositories/user_repository.dart';
-import 'package:finance_app/layers/domain/usecases/getUserBydate/get_user_by_date_usecase.dart';
+import 'package:intl/intl.dart';
 
-class GetUserByDateUseCaseImpl implements GetUserByDateUseCase {
+import 'get_user_with_recent_transactions_usecase.dart';
+
+class GetUserWithRecentTransactionsUseCaseImpl implements GetUserWithRecentTransactionsUseCase {
   final UserRepository _userRepository;
-  GetUserByDateUseCaseImpl(this._userRepository);
+  GetUserWithRecentTransactionsUseCaseImpl(this._userRepository);
 
   @override
-  Future<Either<Failure, UserEntity>> call({required DateTime date}) async {
+  Future<Either<Failure, UserEntity>> call() async {
     try {
       var user = await _userRepository.getUpdatedUser();
-
-      List<TransactionEntity> transactionsList =
-          user.transactions!.where((transaction) {
-        DateTime transactionDate = transaction.date!;
-        DateTime searchDate = date;
-
-        return transactionDate.day == searchDate.day &&
-            transactionDate.month == searchDate.month || transactionDate.day == searchDate.day - 1 && transactionDate.month == searchDate.month || transactionDate.day == searchDate.day - 2 && transactionDate.month == searchDate.month;
-      }).toList();
-
-      print("Lista filtrada: $transactionsList");
-
-      return Right(user.copyWith(transactions: transactionsList));
+      
+      if(user.transactions!.length >= 5){
+        List<TransactionEntity> transactionsList =
+          user.transactions!.sublist(user.transactions!.length - 5, user.transactions!.length);
+          return Right(user.copyWith(transactions: transactionsList));
+      }
+      
+      return Right(user);
     } catch (e) {
       print("O erro é: $e");
       return Left(Failure(errorMessage: "Erro ao Carregar seus dados!"));

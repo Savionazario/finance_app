@@ -14,7 +14,7 @@ class FirebaseTransactionDataSourceImpl implements TransactionDatasource {
     required String description,
     required String paymentMethod,
     required String type,
-    required String value,
+    required double value,
   }) async {
     Timestamp dateTimeStamp = Timestamp.fromDate(date);
 
@@ -34,5 +34,25 @@ class FirebaseTransactionDataSourceImpl implements TransactionDatasource {
     };
 
     await newTransactionDocument.set(transactionData);
+  }
+  
+  @override
+  Future<dynamic> updateTotalValues() async{
+    var userUid = _auth.currentUser!.uid;
+    QuerySnapshot querySnapshot = await _firestore.collection("users").doc(userUid).collection("transactions").get();
+
+    double totalIncome = 0.0;
+    double totalExpense = 0.0;
+
+    querySnapshot.docs.forEach((transaction) {
+      var transactionAsMap = transaction.data() as Map<String, dynamic>;
+      if(transactionAsMap["type"] == "income"){
+        totalIncome += transactionAsMap["value"];
+      }else{
+        totalExpense += transactionAsMap["value"];
+      }
+    });
+
+    await _firestore.collection("users").doc(userUid).update({"income": totalIncome, "expense": totalExpense,});
   }
 }

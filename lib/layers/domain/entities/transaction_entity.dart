@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TransactionEntity {
   String? category;
-  Timestamp? date;
+  DateTime? date;
   String? description;
   String? paymentMethod;
   String? transactionId;

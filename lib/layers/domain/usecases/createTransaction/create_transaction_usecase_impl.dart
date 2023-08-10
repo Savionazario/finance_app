@@ -15,13 +15,17 @@ class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
     required String type,
     required String value,
   }) async {
-    return await _transactionRepository.createTransaction(
+    var response = await _transactionRepository.createTransaction(
       category: category,
       date: date,
       description: description,
       paymentMethod: paymentMethod,
       type: type,
-      value: value,
+      value: double.parse(value),
     );
+
+    await _transactionRepository.updateTotalValues();
+
+    return response;
   }
 }

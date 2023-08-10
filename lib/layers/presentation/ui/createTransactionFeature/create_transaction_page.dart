@@ -1,3 +1,4 @@
+import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectPaymentMethod/select_payment_method_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectTransactionCategory/select_transaction_category_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectTransactionCategory/select_transaction_category_state.dart';
 import 'package:finance_app/layers/presentation/ui/createTransactionFeature/widgets/categories_list_widget.dart';
@@ -9,6 +10,10 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import 'cubits/createTransaction/create_transaction_cubit.dart';
+import 'cubits/createTransaction/create_transaction_state.dart';
+import 'cubits/selectPaymentMethod/select_payment_method_state.dart';
+
 class CreateTransactionPage extends StatefulWidget {
   const CreateTransactionPage({Key? key}) : super(key: key);
 
@@ -19,6 +24,14 @@ class CreateTransactionPage extends StatefulWidget {
 class _CreateTransactionPageState extends State<CreateTransactionPage> {
   final SelectTransactionCategoryCubit _selectTransactionCategoryCubit =
       GetIt.I.get<SelectTransactionCategoryCubit>();
+      final SelectPaymentMethodCubit _selectPaymentMethodCubit =
+      GetIt.I.get<SelectPaymentMethodCubit>();
+  final CreateTransactionCubit _createTransactionCubit =
+      GetIt.I.get<CreateTransactionCubit>();
+
+  final TextEditingController _decriptionController = TextEditingController();
+  final TextEditingController _valueController = TextEditingController();
+  
   List<String> categories = [
     "Alimentação",
     "Transporte",
@@ -26,11 +39,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
     "Saúde",
     "Lazer"
   ];
-  int chosenTypeTransac = 0;
+  String chosenTypeTransac = "expense";
   String chosenCategory = "Alimentação";
   // String date = "Data da transação";
 
   ValueNotifier<String> date = ValueNotifier<String>("Data da transação");
+  DateTime?  dateInDateTime;
 
   _showDatePicker() async {
     DateTime? timePicked = await showDatePicker(
@@ -42,6 +56,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
     if (timePicked != null) {
       // String formattedDate = DateFormat('yyyy-MM-dd').format(timePicked);
       print("data escolhida: $timePicked");
+      dateInDateTime = timePicked;
       return timePicked;
     }
     return null;
@@ -140,6 +155,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                                           height: 50,
                                           width: 170,
                                           child: TextFormField(
+                                            controller: _valueController,
                                             style: GoogleFonts.nunitoSans(
                                               textStyle: TextStyle(
                                                 color: Colors.white,
@@ -222,6 +238,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                                 child: SizedBox(
                                   height: 52,
                                   child: TextFormField(
+                                    controller: _decriptionController,
                                     decoration: InputDecoration(
                                       hintText: "Descrição",
                                       hintStyle: GoogleFonts.nunitoSans(
@@ -295,14 +312,14 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                                                   GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        chosenTypeTransac = 0;
+                                                        chosenTypeTransac = "income";
                                                       });
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                         color:
                                                             chosenTypeTransac ==
-                                                                    0
+                                                                    "income"
                                                                 ? Colors
                                                                     .green[200]
                                                                 : Colors.white,
@@ -355,14 +372,14 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                                                   GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        chosenTypeTransac = 1;
+                                                        chosenTypeTransac = "expense";
                                                       });
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                         color:
                                                             chosenTypeTransac ==
-                                                                    1
+                                                                    "expense"
                                                                 ? Colors
                                                                     .red[200]
                                                                 : Colors.white,
@@ -506,31 +523,191 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                 child: SizedBox(
                   height: 40,
                   width: 190,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          chosenTypeTransac == 0 ? Colors.green : Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: Text(
-                      "Cadastrar transação",
-                      style: GoogleFonts.nunitoSans(
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      var categoryState = _selectTransactionCategoryCubit.state;
-                      if (categoryState is TransactionCategoryInitialState) {
-                        print("Categoria 1: ${categoryState.category}");
-                      } else {
-                        categoryState =
-                            categoryState as TransactionCategorySelectedState;
-                        print("Categoria 2: ${categoryState.category}");
+                  child: BlocBuilder<CreateTransactionCubit,
+                      CreateTransactionState>(
+                    bloc: _createTransactionCubit,
+                    builder: (context, state) {
+                      if (state is CreateTransactionInitialState) {
+                        return TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: chosenTypeTransac == "income"
+                                ? Colors.green
+                                : Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            "Cadastrar transação",
+                            style: GoogleFonts.nunitoSans(
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            String categoryChosen = "";
+                            var categoryState = _selectTransactionCategoryCubit.state;
+
+                            if (categoryState is TransactionCategoryInitialState) {
+                              categoryChosen = categoryState.category;
+                            } else {
+                              categoryState = categoryState as TransactionCategorySelectedState;
+                              categoryChosen = categoryState.category;
+                            }
+
+                            String paymemtMethodChosen = "";
+                            var paymentMethodState = _selectPaymentMethodCubit.state;
+
+                            if (paymentMethodState is SelectPaymentMethodInitialState) {
+                              paymemtMethodChosen = paymentMethodState.paymentMethod;
+                            } else {
+                              paymentMethodState = paymentMethodState as SelectedPaymentMethodState;
+                              paymemtMethodChosen = paymentMethodState.paymentMethod;
+                            }
+
+                            var dateChosen = date.value;
+
+                            if(dateChosen == "Data da transação" || dateChosen.isEmpty){
+                              const snackBar = SnackBar(
+                                content: Text('Escolha uma data!'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }else{
+                              print("Value: ${_valueController.text}");
+                              _createTransactionCubit.createTransactionButtonPressed(category: categoryChosen, date: dateInDateTime!, description: _decriptionController.text, paymentMethod: paymemtMethodChosen, type: chosenTypeTransac, value: _valueController.text);
+                            }
+                          },
+                        );
                       }
+                      if (state is CreateTransactionLoadingState) {
+                        return const Center(
+                          child: SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (state is CreateTransactionErrorState) {
+                        String message = state.errorMessage;
+                        _onWidgetDidBuild(() {
+                          _showErrorDialog(
+                              context, message);
+                        });
+
+                        return TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: chosenTypeTransac == "income"
+                                ? Colors.green
+                                : Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            "Cadastrar transação",
+                            style: GoogleFonts.nunitoSans(
+                              textStyle: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            String categoryChosen = "";
+                            var categoryState = _selectTransactionCategoryCubit.state;
+
+                            if (categoryState is TransactionCategoryInitialState) {
+                              categoryChosen = categoryState.category;
+                            } else {
+                              categoryState = categoryState as TransactionCategorySelectedState;
+                              categoryChosen = categoryState.category;
+                            }
+
+                            String paymemtMethodChosen = "";
+                            var paymentMethodState = _selectPaymentMethodCubit.state;
+
+                            if (paymentMethodState is SelectPaymentMethodInitialState) {
+                              paymemtMethodChosen = paymentMethodState.paymentMethod;
+                            } else {
+                              paymentMethodState = paymentMethodState as SelectedPaymentMethodState;
+                              paymemtMethodChosen = paymentMethodState.paymentMethod;
+                            }
+
+                            var dateChosen = date.value;
+
+                            if(dateChosen == "Data da transação" || dateChosen.isEmpty){
+                              const snackBar = SnackBar(
+                                content: Text('Escolha uma data!'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }else{
+                              print("Value: ${_valueController.text}");
+                              _createTransactionCubit.createTransactionButtonPressed(category: categoryChosen, date: dateInDateTime!, description: _decriptionController.text, paymentMethod: paymemtMethodChosen, type: chosenTypeTransac, value: _valueController.text);
+                            }
+                          },
+                        );
+                      }
+
+                      state = state as CreateTransactionSucessfulState;
+
+                      _onWidgetDidBuild(() {
+                        _showSucessDialog(context);
+                      });
+                      return TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: chosenTypeTransac == "income"
+                              ? Colors.green
+                              : Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          "Cadastrar transação",
+                          style: GoogleFonts.nunitoSans(
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                            String categoryChosen = "";
+                            var categoryState = _selectTransactionCategoryCubit.state;
+
+                            if (categoryState is TransactionCategoryInitialState) {
+                              categoryChosen = categoryState.category;
+                            } else {
+                              categoryState = categoryState as TransactionCategorySelectedState;
+                              categoryChosen = categoryState.category;
+                            }
+
+                            String paymemtMethodChosen = "";
+                            var paymentMethodState = _selectPaymentMethodCubit.state;
+
+                            if (paymentMethodState is SelectPaymentMethodInitialState) {
+                              paymemtMethodChosen = paymentMethodState.paymentMethod;
+                            } else {
+                              paymentMethodState = paymentMethodState as SelectedPaymentMethodState;
+                              paymemtMethodChosen = paymentMethodState.paymentMethod;
+                            }
+
+                            var dateChosen = date.value;
+
+                            if(dateChosen == "Data da transação" || dateChosen.isEmpty){
+                              const snackBar = SnackBar(
+                                content: Text('Escolha uma data!'),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }else{
+                              print("Value: ${_valueController.text}");
+                              _createTransactionCubit.createTransactionButtonPressed(category: categoryChosen, date: dateInDateTime!, description: _decriptionController.text, paymentMethod: paymemtMethodChosen, type: chosenTypeTransac, value: _valueController.text);
+                            }
+                          },
+                      );
                     },
                   ),
                 ),
@@ -542,3 +719,134 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
     );
   }
 }
+
+void _onWidgetDidBuild(Function callback) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    callback();
+  });
+}
+
+_showSucessDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            // title: Text("Ops, algo está errado"),
+            content: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              height: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.green[100],
+                      child: Center(
+                        child: Icon(
+                          Icons.check,
+                          size: 30,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      "Transação cadastrada\ncom sucesso",
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text("Fechar"),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  int count = 0;
+                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  _showErrorDialog(BuildContext context, String errorMessage) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            // title: Text("Ops, algo está errado"),
+            content: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              height: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.red[100],
+                      child: Center(
+                        child: Icon(
+                          Icons.error_outline_rounded,
+                          size: 30,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      errorMessage,
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text("Fechar"),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  int count = 0;
+                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                },
+              )
+            ],
+          );
+        });
+  }
+

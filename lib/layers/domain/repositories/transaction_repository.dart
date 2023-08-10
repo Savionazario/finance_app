@@ -5,6 +5,8 @@ abstract class TransactionRepository {
     required String description,
     required String paymentMethod,
     required String type,
-    required String value,
+    required double value,
   });
+
+  Future<dynamic> updateTotalValues();
 }

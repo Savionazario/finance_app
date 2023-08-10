@@ -12,15 +12,32 @@ class TransactionRepositoryImpl implements TransactionRepository {
     required String description,
     required String paymentMethod,
     required String type,
-    required String value,
+    required double value,
   }) async {
-    return await _transactionDatasource.createTransaction(
-      category: category,
-      date: date,
-      description: description,
-      paymentMethod: paymentMethod,
-      type: type,
-      value: value,
-    );
+    try {
+      return await _transactionDatasource.createTransaction(
+        category: category,
+        date: date,
+        description: description,
+        paymentMethod: paymentMethod,
+        type: type,
+        value: value,
+      );
+    } catch (e) {
+      print("Error: $e");
+      return Exception();
+    }
   }
+  
+  @override
+  Future<dynamic> updateTotalValues() async{
+    try {
+      await _transactionDatasource.updateTotalValues();
+    } catch (e) {
+      print("Error: $e");
+      return Exception();
+    }
+  }
+
+  
 }

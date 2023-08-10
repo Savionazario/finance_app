@@ -3,7 +3,7 @@ import 'package:finance_app/layers/domain/entities/transaction_entity.dart';
 
 class TransactionDto extends TransactionEntity{
   String? category;
-  Timestamp? date;
+  DateTime? date;
   String? description;
   String? paymentMethod;
   String? transactionId;
@@ -22,12 +22,12 @@ class TransactionDto extends TransactionEntity{
   factory TransactionDto.fromJson(Map<String, dynamic> json) {
     return TransactionDto(
       category: json['category'],
-      date: json['date'],
+      date: json['date'].toDate(),
       description: json['description'],
       paymentMethod: json['paymentMethod'],
       transactionId: json['transactionId'],
       type: json['type'],
-      value: json['value'],
+      value: double.parse(json['value'].toString()),
     );
   }
 

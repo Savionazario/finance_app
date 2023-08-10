@@ -59,7 +59,7 @@ class FirebaseAuthenticationDataSourceImpl implements AuthenticationDataSource {
   }
 
   Future<dynamic> _getUserTransactionsFromCollection(String userUid) async {
-    QuerySnapshot querySnapshot = await _firestore.collection("users").doc(userUid).collection("transactions").get();
+    QuerySnapshot querySnapshot = await _firestore.collection("users").doc(userUid).collection("transactions").orderBy('date', descending: true).get();
 
     var transactionsList = querySnapshot.docs.map((doc) => doc.data()).toList();
 

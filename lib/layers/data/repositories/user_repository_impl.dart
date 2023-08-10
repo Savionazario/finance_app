@@ -88,7 +88,7 @@ class UserRepositoryImpl implements UserRepository {
       cachedUser = user;
       return user;
     } catch (e) {
-      throw Exception("Algo deu errado em getUserData no repository: $e");
+      throw Exception("Algo deu errado em getUserData no userRepository: $e");
       // return Left(Failure(errorMessage: "Algo deu errado em getUserData no repository: $e"));
     }
   }

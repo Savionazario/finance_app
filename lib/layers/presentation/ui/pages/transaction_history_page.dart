@@ -1,9 +1,12 @@
+import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/createTransaction/create_transaction_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/createTransaction/create_transaction_state.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/transactionsList/transactions_list_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/transactionsList/transactions_list_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../constants/constants.dart';
 import '../shimmers/shimmer_home_page.dart';
@@ -17,6 +20,14 @@ class TransactionHistoryPage extends StatefulWidget {
 
 class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   late final TransactionListCubit _userTransactionsCubit;
+
+  IconData icon = Icons.food_bank_outlined;
+  Color categoryColor = Colors.yellow;
+
+  getFormattedDate(DateTime date) {
+    String formattedDate = DateFormat("dd/MM").format(date);
+    return formattedDate;
+  }
 
   @override
   void initState() {
@@ -104,26 +115,66 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           ),
                         ),
                       ),
+                      
                       transactionsList.isNotEmpty
                           ? ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: transactionsList.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
+                                switch (transactionsList[index].category) {
+                                  case "Alimentação":
+                                    icon = Icons.food_bank_outlined;
+                                    categoryColor = Colors.yellow;
+                                    break;
+                                  case "Transporte":
+                                    icon = Icons.car_repair;
+                                    categoryColor = Colors.blue;
+                                    break;
+                                  case "Contas":
+                                    icon = Icons.account_balance;
+                                    categoryColor = Colors.orange[800]!;
+                                    break;
+                                  case "Saúde":
+                                    icon = Icons.health_and_safety_outlined;
+                                    categoryColor = Colors.red;
+                                    break;
+                                  case "Lazer":
+                                    icon = Icons.pool_rounded;
+                                    categoryColor = Colors.green;
+                                    break;
+                                  case "Compras":
+                                    icon = Icons.shopping_bag_outlined;
+                                    categoryColor = Colors.purple;
+                                    break;
+                                  case "Salário":
+                                    icon = Icons.wallet_outlined;
+                                    categoryColor = Colors.green[800]!;
+                                    break;
+                                  case "Renda extra":
+                                    icon = Icons.attach_money_rounded;
+                                    categoryColor = Colors.green[300]!;
+                                    break;
+                                  case "Investimentos":
+                                    icon = Icons.call_missed_outgoing_sharp;
+                                    categoryColor = Color(0xFFE9B454);
+                                    break;
+                                  default:
+                                }
                                 var transactionType =
                                     transactionsList[index].type;
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
                                     width: 200,
-                                    height: 80,
+                                    height: 70,
                                     decoration: BoxDecoration(
                                       color: colorBackGround,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
+                                          horizontal: 8.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -137,16 +188,16 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                                 CrossAxisAlignment.center,
                                             children: [
                                               Container(
-                                                width: 50,
-                                                height: 50,
+                                                width: 46,
+                                                height: 46,
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white,
+                                                  color: categoryColor,
                                                   borderRadius:
-                                                      BorderRadius.circular(14),
+                                                      BorderRadius.circular(30),
                                                 ),
                                                 child: Icon(
-                                                  Icons.shopping_bag_outlined,
-                                                  color: middleBlue,
+                                                  icon,
+                                                  color: Colors.white,
                                                   size: 26,
                                                 ),
                                               ),
@@ -164,23 +215,31 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                                       style:
                                                           GoogleFonts.poppins(
                                                         textStyle: TextStyle(
-                                                          fontSize: 16,
+                                                          fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           color: Colors.black,
                                                         ),
                                                       ),
                                                     ),
-                                                    Text(
-                                                      "${transactionsList[index].description}",
-                                                      style:
-                                                          GoogleFonts.poppins(
-                                                        textStyle: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.grey,
+                                                    Container(
+                                                      width: size.width * 0.45,
+
+                                                      // color: Colors.red,
+                                                      child: Text(
+                                                        "${transactionsList[index].description}",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          textStyle: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Colors.grey,
+                                                          ),
                                                         ),
+                                                        softWrap: false,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                   ],
@@ -199,11 +258,11 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                               children: [
                                                 Text(
                                                     transactionType == "expense"
-                                                        ? "- ${transactionsList[index].value.toStringAsFixed(2)}"
-                                                        : "+ ${transactionsList[index].value.toStringAsFixed(2)}",
+                                                        ? "R\$ - ${transactionsList[index].value.toStringAsFixed(2)}"
+                                                        : "R\$ + ${transactionsList[index].value.toStringAsFixed(2)}",
                                                     style: GoogleFonts.poppins(
                                                       textStyle: TextStyle(
-                                                        fontSize: 16,
+                                                        fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                         color:
@@ -214,7 +273,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                                                       ),
                                                     )),
                                                 Text(
-                                                  "16/04",
+                                                  getFormattedDate(
+                                                      transactionsList[index]
+                                                          .date),
                                                   style: GoogleFonts.poppins(
                                                     textStyle: TextStyle(
                                                       fontSize: 12,
@@ -235,24 +296,24 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                               },
                             )
                           : Expanded(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 160.0),
-                                child: Container(
-                                  child: Text(
-                                    "Nenhum resultado encontrado.",
-                                    style: GoogleFonts.montserrat(
-                                      textStyle: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        // color: Colors.grey,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 160.0),
+                                  child: Container(
+                                    child: Text(
+                                      "Nenhum resultado encontrado.",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          // color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
                       // Expanded(
                       //   child: Container(
                       //     // height: 100,
