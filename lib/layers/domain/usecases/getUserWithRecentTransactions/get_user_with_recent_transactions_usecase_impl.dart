@@ -3,8 +3,6 @@ import 'package:finance_app/layers/domain/entities/user_entity.dart';
 import 'package:finance_app/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:finance_app/layers/domain/repositories/user_repository.dart';
-import 'package:intl/intl.dart';
-
 import 'get_user_with_recent_transactions_usecase.dart';
 
 class GetUserWithRecentTransactionsUseCaseImpl implements GetUserWithRecentTransactionsUseCase {

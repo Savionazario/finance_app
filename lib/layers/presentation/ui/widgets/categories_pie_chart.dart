@@ -11,7 +11,7 @@ class CategoriesPieChart extends StatefulWidget {
 }
 
 class _CategoriesPieChartState extends State<CategoriesPieChart> {
-  List<CategoriesData> _chatData = [];
+  late List<CategoriesData> _chartData;
   late TooltipBehavior _tooltipBehavior;
 
   getChartData() {
@@ -39,30 +39,22 @@ class _CategoriesPieChartState extends State<CategoriesPieChart> {
       }
     });
 
-    Map<String, double> categoryPercentage = {
-      "Alimentação": 0.0,
-      "Transporte": 0.0,
-      "Contas": 0.0,
-      "Saúde": 0.0,
-      "Lazer": 0.0,
-      "Compras": 0.0,
-    };
     categoryTotal.forEach((category, total) {
       double percentage = (total / totalAmount) * 100;
       String percentageInString = percentage.toStringAsFixed(2);
       double categoryPercentage = double.parse(percentageInString);
 
-      _chatData.add(CategoriesData(
+      chartData.add(CategoriesData(
           category: category, categoryPercentage: categoryPercentage));
     });
 
     print("Category total: $categoryTotal");
-    return _chatData;
+    return chartData;
   }
 
   @override
   void initState() {
-    getChartData();
+    _chartData = getChartData();
     _tooltipBehavior = TooltipBehavior(enable: true);
     super.initState();
   }
@@ -89,7 +81,7 @@ class _CategoriesPieChartState extends State<CategoriesPieChart> {
         tooltipBehavior: _tooltipBehavior,
         series: <CircularSeries>[
           PieSeries<CategoriesData, String>(
-            dataSource: _chatData,
+            dataSource: _chartData,
             xValueMapper: (CategoriesData data, _) => data.category,
             yValueMapper: (CategoriesData data, _) => data.categoryPercentage,
             dataLabelSettings: DataLabelSettings(

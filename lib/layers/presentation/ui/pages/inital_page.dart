@@ -12,10 +12,6 @@ class InitalPage extends StatefulWidget {
 }
 
 class _InitalPageState extends State<InitalPage> {
-  var ligtherBlue = Color(0xFF4365AA);
-  var middleBlue = Color(0xFF234F9D);
-  var darkerBlue = Color(0xFF233C65);
-  var colorBackGround = Color(0xFFF3F5F9);
   var blue = Color(0xFF0E3AAA);
 
   int paginaAtual = 0;

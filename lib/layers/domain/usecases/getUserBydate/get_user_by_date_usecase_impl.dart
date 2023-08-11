@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:finance_app/layers/domain/entities/transaction_entity.dart';
 import 'package:finance_app/layers/domain/entities/user_entity.dart';
 import 'package:finance_app/core/errors/failure.dart';

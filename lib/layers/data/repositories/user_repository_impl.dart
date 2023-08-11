@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:dartz/dartz.dart';
 import 'package:finance_app/layers/data/datasources/authentication_datasource.dart';
-import 'package:finance_app/layers/data/dto/user_dto.dart';
 import 'package:finance_app/layers/domain/entities/user_entity.dart';
 import 'package:finance_app/layers/domain/repositories/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,12 +29,6 @@ class UserRepositoryImpl implements UserRepository {
       return Left(Failure(errorMessage: 'Erro ao criar conta, tente novamente.'));
     }
     
-  }
-
-  @override
-  getFirebaseInstance() {
-    // TODO: implement getFirebaseInstance
-    throw UnimplementedError();
   }
 
   @override
