@@ -274,7 +274,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                               break;
                             case "Contas":
                               icon = Icons.account_balance;
-                              categoryColor = Colors.orange;
+                              categoryColor = Colors.orange[800]!;
                               break;
                             case "Saúde":
                               icon = Icons.health_and_safety_outlined;
@@ -287,6 +287,18 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                             case "Compras":
                               icon = Icons.shopping_bag_outlined;
                               categoryColor = Colors.purple;
+                              break;
+                            case "Salário":
+                              icon = Icons.wallet_outlined;
+                              categoryColor = Colors.green[800]!;
+                              break;
+                            case "Renda extra":
+                              icon = Icons.attach_money_rounded;
+                              categoryColor = Colors.green[300]!;
+                              break;
+                            case "Investimentos":
+                              icon = Icons.call_missed_outgoing_sharp;
+                              categoryColor = Color(0xFFE9B454);
                               break;
                             default:
                           }

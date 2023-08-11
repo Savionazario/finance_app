@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 18.0, vertical: 20),
+                              horizontal: 12.0, vertical: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -398,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
+                          horizontal: 12.0,
                           vertical: 16.0,
                         ),
                         child: Column(
@@ -572,11 +572,11 @@ class _HomePageState extends State<HomePage> {
                                                           ),
                                                           Container(
                                                             width: size.width *
-                                                                0.45,
+                                                                0.4,
 
                                                             // color: Colors.red,
                                                             child: Text(
-                                                              "${transactionsList[index].description}",
+                                                              "${transactionsList[index].paymentMethod}",
                                                               style: GoogleFonts
                                                                   .poppins(
                                                                 textStyle:

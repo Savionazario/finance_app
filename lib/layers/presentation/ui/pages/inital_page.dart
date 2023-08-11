@@ -359,7 +359,7 @@ class _InitalPageState extends State<InitalPage> {
                                                 size: 20,
                                               ),
                                               onPressed: () {
-                                                // Navigator.pop(context);
+                                                Navigator.pop(context);
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -407,6 +407,13 @@ class _InitalPageState extends State<InitalPage> {
                                               ),
                                               onPressed: () {
                                                 Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CreateTransactionPage(),
+                                                  ),
+                                                );
                                               },
                                             ),
                                           ),
