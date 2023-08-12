@@ -1,10 +1,12 @@
 import 'package:finance_app/layers/domain/repositories/transaction_repository.dart';
+import 'package:finance_app/layers/domain/repositories/user_repository.dart';
 
 import 'create_transaction_usecase.dart';
 
 class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
   final TransactionRepository _transactionRepository;
-  CreateTransactionUseCaseImpl(this._transactionRepository);
+  final UserRepository _userRepository;
+  CreateTransactionUseCaseImpl(this._transactionRepository, this._userRepository);
 
   @override
   Future call({
@@ -25,6 +27,8 @@ class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
     );
 
     await _transactionRepository.updateTotalValues();
+
+    _userRepository.invalidateCachedUser();
 
     return response;
   }

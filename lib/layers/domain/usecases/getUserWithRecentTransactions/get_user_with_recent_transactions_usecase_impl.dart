@@ -16,7 +16,7 @@ class GetUserWithRecentTransactionsUseCaseImpl implements GetUserWithRecentTrans
       
       if(user.transactions!.length >= 5){
         List<TransactionEntity> transactionsList =
-          user.transactions!.sublist(user.transactions!.length - 5, user.transactions!.length);
+          user.transactions!.sublist(0, 5);
           return Right(user.copyWith(transactions: transactionsList));
       }
       

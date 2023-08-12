@@ -12,7 +12,12 @@ class GetUserDetailsCubit extends Cubit<GetUserDetailsState> {
 
   void loadUserDetails({required DateTime date}) async {
     try {
+      
       emit(GetUserDetailsLoadingState());
+      // await Future.delayed(Duration(seconds: 2),(){
+      //   print("Passando por aqui");
+      // });
+      
 
       // var result = await _getUserByDateUseCase(date: date);
       var result = await _getUserWithRecentTransactionsUseCase();

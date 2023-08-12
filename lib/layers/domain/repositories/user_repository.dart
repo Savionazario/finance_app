@@ -15,4 +15,6 @@ abstract class UserRepository {
   Future<UserEntity> getUpdatedUser();
 
   bool isSignIn();
+
+  void  invalidateCachedUser();
 }

@@ -62,7 +62,6 @@ class InjectionContainer {
     getIt.registerLazySingleton<IsSignInUseCase>(
       () => IsSignInUseCaseImpl(getIt()),
     );
-    
 
     //* cubits
     getIt.registerLazySingleton<AuthenticationCubit>(
@@ -106,7 +105,10 @@ class InjectionContainer {
       () => GetUserWithRecentTransactionsUseCaseImpl(getIt()),
     );
     getIt.registerLazySingleton<CreateTransactionUseCase>(
-      () => CreateTransactionUseCaseImpl(getIt()),
+      () => CreateTransactionUseCaseImpl(
+        getIt(),
+        getIt(),
+      ),
     );
 
     //* cubits

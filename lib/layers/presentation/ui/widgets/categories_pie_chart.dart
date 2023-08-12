@@ -18,11 +18,13 @@ class _CategoriesPieChartState extends State<CategoriesPieChart> {
     List transactions = widget.user.transactions!;
     double totalAmount = widget.user.expense!;
     List<CategoriesData> chartData = [];
-
-    // double totalAmountPerCategory = 0.0;
-    // for (int i = 0; i < transactions.length; i++) {
-    //   if (transactions[i].type == "expense") {}
-    // }
+    // List<CategoriesData> chartData = [
+    //   CategoriesData(category: "Alimentação", categoryPercentage: 41.1),
+    //   CategoriesData(category: "Transporte", categoryPercentage: 13.7),
+    //   CategoriesData(category: "Lazer", categoryPercentage: 16.44),
+    //   CategoriesData(category: "Contas", categoryPercentage: 2.74),
+    //   CategoriesData(category: "Sáude", categoryPercentage: 26.02),
+    // ];
 
     Map<String, double> categoryTotal = {
       "Alimentação": 0.0,
@@ -48,7 +50,6 @@ class _CategoriesPieChartState extends State<CategoriesPieChart> {
           category: category, categoryPercentage: categoryPercentage));
     });
 
-    print("Category total: $categoryTotal");
     return chartData;
   }
 
@@ -62,35 +63,37 @@ class _CategoriesPieChartState extends State<CategoriesPieChart> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       height: size.height * 0.3,
       width: size.width * 0.8,
       child: SfCircularChart(
         title: ChartTitle(
           text: "Porcentagem de despesas por categoria",
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             color: Colors.white,
             fontSize: 14,
           ),
         ),
-        legend: Legend(
+        legend: const Legend(
           isVisible: true,
           overflowMode: LegendItemOverflowMode.wrap,
           textStyle: TextStyle(color: Colors.white),
         ),
         tooltipBehavior: _tooltipBehavior,
         series: <CircularSeries>[
-          PieSeries<CategoriesData, String>(
+          DoughnutSeries<CategoriesData, String>(
             dataSource: _chartData,
             xValueMapper: (CategoriesData data, _) => data.category,
             yValueMapper: (CategoriesData data, _) => data.categoryPercentage,
-            dataLabelSettings: DataLabelSettings(
+            dataLabelSettings: const DataLabelSettings(
               isVisible: true,
               showZeroValue: false,
               // color: Colors.white
               textStyle: TextStyle(color: Colors.white),
             ),
             enableTooltip: true,
+            // animationDuration: 0.0,
+            animationDelay: 0.0,
           ),
         ],
       ),

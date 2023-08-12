@@ -7,7 +7,8 @@ import '../cubits/selectTransactionCategory/select_transaction_category_cubit.da
 import '../cubits/selectTransactionCategory/select_transaction_category_state.dart';
 
 class CategoriesListWidget extends StatefulWidget {
-  const CategoriesListWidget({Key? key}) : super(key: key);
+  final List categories;
+  const CategoriesListWidget({Key? key, required this.categories}) : super(key: key);
 
   @override
   _CategoriesListWidgetState createState() => _CategoriesListWidgetState();
@@ -16,21 +17,17 @@ class CategoriesListWidget extends StatefulWidget {
 class _CategoriesListWidgetState extends State<CategoriesListWidget> {
   final SelectTransactionCategoryCubit _selectTransactionCategoryCubit =
       GetIt.I.get<SelectTransactionCategoryCubit>();
-  List<String> categories = [
-    "Alimentação",
-    "Transporte",
-    "Contas",
-    "Saúde",
-    "Lazer",
-    "Compras",
-  ];
+  
   String initialCategory = "";
   IconData icon = Icons.food_bank_outlined;
   Color categoryColor = Colors.yellow;
 
   @override
   Widget build(BuildContext context) {
+    List categories = widget.categories;
+    initialCategory = categories[0];
     Size size = MediaQuery.of(context).size;
+    
     return Material(
       color: Colors.transparent,
       child: BlocBuilder<SelectTransactionCategoryCubit,
@@ -38,7 +35,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
         bloc: _selectTransactionCategoryCubit,
         builder: (context, state) {
           if (state is TransactionCategoryInitialState) {
-            initialCategory = state.category;
+            
             icon = Icons.food_bank_outlined;
             categoryColor = Colors.yellow;
 
@@ -88,6 +85,18 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                               case "Compras":
                                 icon = Icons.shopping_bag_outlined;
                                 categoryColor = Colors.purple;
+                                break;
+                              case "Salário":
+                                icon = Icons.wallet_outlined;
+                                categoryColor = Colors.green[800]!;
+                                break;
+                              case "Renda extra":
+                                icon = Icons.attach_money_rounded;
+                                categoryColor = Colors.green[300]!;
+                                break;
+                              case "Investimentos":
+                                icon = Icons.call_missed_outgoing_sharp;
+                                categoryColor = Color(0xFFE9B454);
                                 break;
                               default:
                             }

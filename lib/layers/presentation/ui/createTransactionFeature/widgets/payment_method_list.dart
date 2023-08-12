@@ -20,7 +20,10 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
     "Cartão de crédito",
     "Pix",
   ];
+  IconData icon = Icons.food_bank_outlined;
+  Color paymentMethodColor = Colors.yellow;
   String initialPaymentMethod = "";
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -53,6 +56,22 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
                           itemCount: paymentMethods.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
+                            switch (paymentMethods[index]) {
+                              case "Cartão de débito":
+                                icon = Icons.credit_card;
+                                paymentMethodColor = Colors.green[200]!;
+                                break;
+                              case "Cartão de crédito":
+                                icon = Icons.credit_card;
+                                paymentMethodColor = Colors.blue[700]!;
+                                break;
+                              case "Pix":
+                                icon = Icons.pix;
+                                paymentMethodColor = Colors.teal;
+                                break;
+                              
+                              default:
+                            }
                             print("Lenght: ${paymentMethods.length}");
                             return InkWell(
                               onTap: () {
@@ -64,7 +83,7 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
                               },
                               child: Container(
                                 // color: Colors.red,
-                                height: 60,
+                                height: 70,
                                 width: size.width,
                                 decoration: BoxDecoration(
                                   border: Border(
@@ -85,10 +104,11 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
                                           child: Container(
                                             height: 38,
                                             width: 38,
-                                            color: Colors.grey,
+                                            color: paymentMethodColor,
                                             child: Icon(
-                                              Icons.shopping_bag_outlined,
+                                              icon,
                                               size: 20,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
@@ -226,6 +246,22 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
                         itemCount: paymentMethods.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          switch (paymentMethods[index]) {
+                              case "Cartão de débito":
+                                icon = Icons.credit_card;
+                                paymentMethodColor = Colors.green[200]!;
+                                break;
+                              case "Cartão de crédito":
+                                icon = Icons.credit_card;
+                                paymentMethodColor = Colors.blue[700]!;
+                                break;
+                              case "Pix":
+                                icon = Icons.pix;
+                                paymentMethodColor = Colors.teal;
+                                break;
+                              
+                              default:
+                            }
                           print("Lenght: ${paymentMethods.length}");
                           return InkWell(
                             onTap: () {
@@ -237,7 +273,7 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
                             },
                             child: Container(
                               // color: Colors.red,
-                              height: 60,
+                              height: 70,
                               width: size.width,
                               decoration: BoxDecoration(
                                 border: Border(
@@ -257,10 +293,11 @@ class _PaymentMethodListState extends State<PaymentMethodList> {
                                         child: Container(
                                           height: 38,
                                           width: 38,
-                                          color: Colors.grey,
+                                          color: paymentMethodColor,
                                           child: Icon(
-                                            Icons.shopping_bag_outlined,
+                                            icon,
                                             size: 20,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),

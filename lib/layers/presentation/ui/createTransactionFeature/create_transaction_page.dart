@@ -15,7 +15,9 @@ import 'cubits/createTransaction/create_transaction_state.dart';
 import 'cubits/selectPaymentMethod/select_payment_method_state.dart';
 
 class CreateTransactionPage extends StatefulWidget {
-  const CreateTransactionPage({Key? key}) : super(key: key);
+  final String typeTransaction;
+  const CreateTransactionPage({Key? key, required this.typeTransaction})
+      : super(key: key);
 
   @override
   _CreateTransactionPageState createState() => _CreateTransactionPageState();
@@ -32,18 +34,17 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
   final TextEditingController _decriptionController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
 
-  List<String> categories = [
+  List<String> categoriesExpense = [
     "Alimentação",
     "Transporte",
     "Contas",
     "Saúde",
     "Lazer"
-    "Salário",
-    "Investimentos",
-    "Renda extra"
   ];
-  String chosenTypeTransac = "expense";
-  String chosenCategory = "Alimentação";
+  List<String> categoriesIncome = ["Salário", "Investimentos", "Renda extra"];
+
+  String chosenTypeTransac = "";
+
   // String date = "Data da transação";
 
   ValueNotifier<String> date = ValueNotifier<String>("Data da transação");
@@ -63,6 +64,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       return timePicked;
     }
     return null;
+  }
+
+  @override
+  void initState() {
+    chosenTypeTransac = widget.typeTransaction;
+    super.initState();
   }
 
   @override
@@ -275,7 +282,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 0.0),
-                                child: CategoriesListWidget(),
+                                child: chosenTypeTransac == "income"
+                                    ? CategoriesListWidget(
+                                        categories: categoriesIncome,
+                                      )
+                                    : CategoriesListWidget(
+                                        categories: categoriesExpense),
                               ),
                               Material(
                                 color: Colors.transparent,
@@ -318,6 +330,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                                                         chosenTypeTransac =
                                                             "income";
                                                       });
+                                                      _selectTransactionCategoryCubit
+                                                          .selectCategory(
+                                                              category:
+                                                                  categoriesIncome[
+                                                                      0],
+                                                              indexCategory: 0);
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
@@ -379,6 +397,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                                                         chosenTypeTransac =
                                                             "expense";
                                                       });
+                                                      _selectTransactionCategoryCubit
+                                                          .selectCategory(
+                                                              category:
+                                                                  categoriesExpense[
+                                                                      0],
+                                                              indexCategory: 0);
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
@@ -612,12 +636,13 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: SizedBox(
                               height: 24,
                               width: 24,
                               child: CircularProgressIndicator(
                                 color: Colors.white,
+                                strokeWidth: 3,
                               ),
                             ),
                           ),
@@ -811,7 +836,6 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackBar);
                           } else {
-                            print("Value: ${_valueController.text}");
                             _createTransactionCubit
                                 .createTransactionButtonPressed(
                                     category: categoryChosen,

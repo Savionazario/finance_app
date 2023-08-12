@@ -84,6 +84,7 @@ class UserRepositoryImpl implements UserRepository {
     }
   }
 
+  @override
   void invalidateCachedUser() {
     cachedUser = null;
   }
