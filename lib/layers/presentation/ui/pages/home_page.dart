@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../constants/constants.dart';
+import '../cubits/changePage/change_page_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -45,6 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   late final AuthenticationCubit _authenticationCubit;
   late final GetUserDetailsCubit _getUserDetailsCubit;
+  late final ChangePageCubit _changePageCubit;
 
   IconData icon = Icons.food_bank_outlined;
   Color categoryColor = Colors.yellow;
@@ -59,6 +61,7 @@ class _HomePageState extends State<HomePage> {
     _authenticationCubit = GetIt.I.get<AuthenticationCubit>();
     _getUserDetailsCubit = GetIt.I.get<GetUserDetailsCubit>();
     _getUserDetailsCubit.loadUserDetails(date: DateTime.now());
+    _changePageCubit = GetIt.I.get<ChangePageCubit>();
     super.initState();
   }
 
@@ -200,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       "${state.userEntity.name}",
                                       style: GoogleFonts.openSans(
-                                        textStyle: TextStyle(
+                                        textStyle: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -209,189 +212,23 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  width: 50,
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor: Colors.grey[300]),
-                                    child: Icon(
-                                      Icons.logout,
-                                      color: Colors.black,
-                                    ),
-                                    onPressed: () {
-                                      _authenticationCubit.signOut();
-                                      // Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             ShimmerHomePage()));
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // Center(
-                        //   child: Container(
-                        //     width: size.width / 1.1,
-                        //     height: 100,
-                        //     decoration: BoxDecoration(
-                        //       // color: blue,
-                        //       gradient: LinearGradient(
-                        //         begin: Alignment.topLeft,
-                        //         end: Alignment(0.8, 1),
-                        //         colors: [
-                        //           areia,
-                        //           darkPurple,
-                        //           // darkPurpleTwo,
-                        //           // darkPurpleThree,
-                        //           // bluethree,
-                        //           // bluetwo,
-                        //           blue,
-                        //         ],
-                        //       ),
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        // child: Column(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   crossAxisAlignment: CrossAxisAlignment.center,
-                        //   children: [
-                        //     Text(
-                        //       "Saldo disponível",
-                        //       style: GoogleFonts.nunitoSans(
-                        //         textStyle: const TextStyle(
-                        //           fontSize: 14,
-                        //           color: Colors.white,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //     Text(
-                        //       "R\$${(state.userEntity.income! - state.userEntity.expense!).toStringAsFixed(2)}",
-                        //       style: GoogleFonts.montserrat(
-                        //         textStyle: const TextStyle(
-                        //           fontSize: 24,
-                        //           color: Colors.white,
-                        //           fontWeight: FontWeight.w600,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        //   ),
-                        // ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
                                 // SizedBox(
-                                //   height: 130,
-                                //   width: 160,
-                                //   child: Card(
-                                //     elevation: 0,
-                                //     shape: OutlineInputBorder(
-                                //       borderRadius: BorderRadius.circular(10),
-                                //       borderSide: BorderSide(
-                                //         color: Colors.blueGrey[100]!,
-                                //       ),
+                                //   width: 50,
+                                //   child: TextButton(
+                                //     style: TextButton.styleFrom(
+                                //         backgroundColor: Colors.grey[300]),
+                                //     child: Icon(
+                                //       Icons.logout,
+                                //       color: Colors.black,
                                 //     ),
-                                //     color: colorBackGround,
-                                //     child: Column(
-                                //       mainAxisAlignment:
-                                //           MainAxisAlignment.spaceEvenly,
-                                //       children: [
-                                //         ClipRRect(
-                                //           borderRadius:
-                                //               BorderRadius.circular(20),
-                                //           child: Container(
-                                //             color: Colors.green[100],
-                                //             height: 34,
-                                //             width: 34,
-                                //             child: Icon(
-                                //               Icons.arrow_downward_rounded,
-                                //               color: Colors.green,
-                                //               size: 18,
-                                //             ),
-                                //           ),
-                                //         ),
-                                //         Text(
-                                //           "Renda",
-                                //           style: GoogleFonts.montserrat(
-                                //               textStyle: const TextStyle(
-                                //             fontSize: 12,
-                                //             color: Colors.blueGrey,
-                                //             fontWeight: FontWeight.w500,
-                                //           )),
-                                //         ),
-                                //         Text(
-                                //           "R\$${state.userEntity.income!.toStringAsFixed(2)}",
-                                //           style: GoogleFonts.montserrat(
-                                //               textStyle: TextStyle(
-                                //             fontSize: 16,
-                                //             color: Colors.black,
-                                //             fontWeight: FontWeight.w600,
-                                //           )),
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
-
-                                // SizedBox(
-                                //   height: 130,
-                                //   width: 160,
-                                //   child: Card(
-                                //     elevation: 0,
-                                //     shape: OutlineInputBorder(
-                                //       borderRadius: BorderRadius.circular(10),
-                                //       borderSide: BorderSide(
-                                //         color: Colors.blueGrey[100]!,
-                                //       ),
-                                //     ),
-                                //     color: colorBackGround,
-                                //     child: Column(
-                                //       mainAxisAlignment:
-                                //           MainAxisAlignment.spaceEvenly,
-                                //       children: [
-                                //         ClipRRect(
-                                //           borderRadius:
-                                //               BorderRadius.circular(20),
-                                //           child: Container(
-                                //             color: Colors.red[100],
-                                //             height: 34,
-                                //             width: 34,
-                                //             child: const Icon(
-                                //               Icons.arrow_upward_rounded,
-                                //               color: Colors.red,
-                                //               size: 18,
-                                //             ),
-                                //           ),
-                                //         ),
-                                //         Text(
-                                //           "Despesas",
-                                //           style: GoogleFonts.montserrat(
-                                //               textStyle: const TextStyle(
-                                //             fontSize: 12,
-                                //             color: Colors.blueGrey,
-                                //             fontWeight: FontWeight.w500,
-                                //           )),
-                                //         ),
-                                //         Text(
-                                //           "R\$${state.userEntity.expense!.toStringAsFixed(2)}",
-                                //           style: GoogleFonts.montserrat(
-                                //               textStyle: TextStyle(
-                                //             fontSize: 16,
-                                //             color: Colors.black,
-                                //             fontWeight: FontWeight.w600,
-                                //           )),
-                                //         ),
-                                //       ],
-                                //     ),
+                                //     onPressed: () {
+                                //       _authenticationCubit.signOut();
+                                //       // Navigator.push(
+                                //       //     context,
+                                //       //     MaterialPageRoute(
+                                //       //         builder: (context) =>
+                                //       //             ShimmerHomePage()));
+                                //     },
                                 //   ),
                                 // ),
                               ],
@@ -399,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 60,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -421,22 +258,27 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       "Transações recentes",
                                       style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
+                                        textStyle: const TextStyle(
                                           fontSize: 16,
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      "Ver tudo",
-                                      style: GoogleFonts.montserrat(
-                                        textStyle: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.blueGrey[300],
-                                          fontWeight: FontWeight.bold,
+                                    GestureDetector(
+                                      child: Text(
+                                        "Ver tudo",
+                                        style: GoogleFonts.montserrat(
+                                          textStyle: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.blueGrey[300],
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
+                                      onTap: () {
+                                        _changePageCubit.changePage(pageIndex: 1);
+                                      },
                                     ),
                                   ],
                                 ),
@@ -457,15 +299,16 @@ class _HomePageState extends State<HomePage> {
                               // getShimmerListEffect(),
                               transactionsList.isNotEmpty
                                   ? Padding(
-                                    padding: EdgeInsets.only(bottom: size.height * 0.08),
-                                    child: ListView.builder(
+                                      padding: EdgeInsets.only(
+                                          bottom: size.height * 0.08),
+                                      child: ListView.builder(
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         itemCount: transactionsList.length,
                                         shrinkWrap: true,
                                         itemBuilder: (context, index) {
-                                          switch (
-                                              transactionsList[index].category) {
+                                          switch (transactionsList[index]
+                                              .category) {
                                             case "Alimentação":
                                               icon = Icons.food_bank_outlined;
                                               categoryColor = Colors.yellow;
@@ -476,7 +319,8 @@ class _HomePageState extends State<HomePage> {
                                               break;
                                             case "Contas":
                                               icon = Icons.account_balance;
-                                              categoryColor = Colors.orange[800]!;
+                                              categoryColor =
+                                                  Colors.orange[800]!;
                                               break;
                                             case "Saúde":
                                               icon = Icons
@@ -488,16 +332,19 @@ class _HomePageState extends State<HomePage> {
                                               categoryColor = Colors.green;
                                               break;
                                             case "Compras":
-                                              icon = Icons.shopping_bag_outlined;
+                                              icon =
+                                                  Icons.shopping_bag_outlined;
                                               categoryColor = Colors.purple;
                                               break;
                                             case "Salário":
                                               icon = Icons.wallet_outlined;
-                                              categoryColor = Colors.green[800]!;
+                                              categoryColor =
+                                                  Colors.green[800]!;
                                               break;
                                             case "Renda extra":
                                               icon = Icons.attach_money_rounded;
-                                              categoryColor = Colors.green[300]!;
+                                              categoryColor =
+                                                  Colors.green[300]!;
                                               break;
                                             case "Investimentos":
                                               icon = Icons
@@ -543,10 +390,12 @@ class _HomePageState extends State<HomePage> {
                                                           height: 46,
                                                           decoration:
                                                               BoxDecoration(
-                                                            color: categoryColor,
+                                                            color:
+                                                                categoryColor,
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(30),
+                                                                    .circular(
+                                                                        30),
                                                           ),
                                                           child: Icon(
                                                             icon,
@@ -569,11 +418,13 @@ class _HomePageState extends State<HomePage> {
                                                             children: [
                                                               Text(
                                                                 "${transactionsList[index].category}",
-                                                                style: GoogleFonts
-                                                                    .poppins(
+                                                                style:
+                                                                    GoogleFonts
+                                                                        .poppins(
                                                                   textStyle:
                                                                       TextStyle(
-                                                                    fontSize: 14,
+                                                                    fontSize:
+                                                                        14,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w600,
@@ -586,13 +437,12 @@ class _HomePageState extends State<HomePage> {
                                                                 width:
                                                                     size.width *
                                                                         0.4,
-                                  
+
                                                                 // color: Colors.red,
                                                                 child: Text(
                                                                   "${transactionsList[index].paymentMethod}",
-                                                                  style:
-                                                                      GoogleFonts
-                                                                          .poppins(
+                                                                  style: GoogleFonts
+                                                                      .poppins(
                                                                     textStyle:
                                                                         TextStyle(
                                                                       fontSize:
@@ -604,7 +454,8 @@ class _HomePageState extends State<HomePage> {
                                                                           .grey,
                                                                     ),
                                                                   ),
-                                                                  softWrap: false,
+                                                                  softWrap:
+                                                                      false,
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
@@ -642,7 +493,8 @@ class _HomePageState extends State<HomePage> {
                                                                           .w600,
                                                                   color: transactionType ==
                                                                           "expense"
-                                                                      ? Colors.red
+                                                                      ? Colors
+                                                                          .red
                                                                       : Colors
                                                                           .green,
                                                                 ),
@@ -675,7 +527,7 @@ class _HomePageState extends State<HomePage> {
                                           );
                                         },
                                       ),
-                                  )
+                                    )
                                   : Align(
                                       alignment: Alignment.center,
                                       child: Padding(

@@ -10,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../cubits/transactionsList/transactions_list_cubit.dart';
 import 'cubits/createTransaction/create_transaction_cubit.dart';
 import 'cubits/createTransaction/create_transaction_state.dart';
 import 'cubits/selectPaymentMethod/select_payment_method_state.dart';
@@ -30,6 +31,8 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       GetIt.I.get<SelectPaymentMethodCubit>();
   final CreateTransactionCubit _createTransactionCubit =
       GetIt.I.get<CreateTransactionCubit>();
+  final TransactionListCubit _userTransactionsCubit =
+      GetIt.I.get<TransactionListCubit>();
 
   final TextEditingController _decriptionController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
@@ -39,7 +42,8 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
     "Transporte",
     "Contas",
     "Saúde",
-    "Lazer"
+    "Lazer",
+    "Compras",
   ];
   List<String> categoriesIncome = ["Salário", "Investimentos", "Renda extra"];
 
@@ -857,134 +861,135 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       ),
     );
   }
+
+  _showSucessDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            // title: Text("Ops, algo está errado"),
+            content: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              height: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.green[100],
+                      child: Center(
+                        child: Icon(
+                          Icons.check,
+                          size: 30,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      "Transação cadastrada\ncom sucesso",
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text("Fechar"),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  _userTransactionsCubit.loadUserWithFilteredTransactions(searchText: "");
+                  int count = 0;
+                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  _showErrorDialog(BuildContext context, String errorMessage) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            // title: Text("Ops, algo está errado"),
+            content: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              height: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.red[100],
+                      child: Center(
+                        child: Icon(
+                          Icons.error_outline_rounded,
+                          size: 30,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      errorMessage,
+                      style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text("Fechar"),
+                onPressed: () {
+                  // Navigator.pop(context);
+                  int count = 0;
+                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                },
+              )
+            ],
+          );
+        });
+  }
 }
 
 void _onWidgetDidBuild(Function callback) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     callback();
   });
-}
-
-_showSucessDialog(BuildContext context) {
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          // title: Text("Ops, algo está errado"),
-          content: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            height: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.green[100],
-                    child: Center(
-                      child: Icon(
-                        Icons.check,
-                        size: 30,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(
-                    "Transação cadastrada\ncom sucesso",
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
-                    ),
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text("Fechar"),
-              onPressed: () {
-                // Navigator.pop(context);
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 2);
-              },
-            )
-          ],
-        );
-      });
-}
-
-_showErrorDialog(BuildContext context, String errorMessage) {
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          // title: Text("Ops, algo está errado"),
-          content: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            height: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.red[100],
-                    child: Center(
-                      child: Icon(
-                        Icons.error_outline_rounded,
-                        size: 30,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(
-                    errorMessage,
-                    style: GoogleFonts.roboto(
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
-                    ),
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text("Fechar"),
-              onPressed: () {
-                // Navigator.pop(context);
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 2);
-              },
-            )
-          ],
-        );
-      });
 }

@@ -100,7 +100,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                                 break;
                               default:
                             }
-                            print("Lenght: ${categories.length}");
+
                             return InkWell(
                               onTap: () {
                                 _selectTransactionCategoryCubit.selectCategory(

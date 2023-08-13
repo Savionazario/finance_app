@@ -225,10 +225,23 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       }
 
-                      return const Padding(
-                        padding: EdgeInsets.only(top: 16.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
+                      return Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: SizedBox(
+                            width: 340,
+                            height: 50,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Color(0xFF0E3AAA),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 3,),
+                              onPressed: () {},
+                            ),
+                          ),
+                        );
                     },
                   ),
                   Padding(

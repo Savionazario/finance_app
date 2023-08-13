@@ -1,7 +1,11 @@
 import 'package:finance_app/layers/presentation/ui/createTransactionFeature/create_transaction_page.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/changePage/change_page_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/changePage/change_page_state.dart';
 import 'package:finance_app/layers/presentation/ui/pages/transaction_history_page.dart';
 import 'package:finance_app/layers/presentation/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class InitalPage extends StatefulWidget {
@@ -12,6 +16,8 @@ class InitalPage extends StatefulWidget {
 }
 
 class _InitalPageState extends State<InitalPage> {
+  late final ChangePageCubit _changePageCubit;
+
   var blue = Color(0xFF0E3AAA);
 
   int paginaAtual = 0;
@@ -20,6 +26,12 @@ class _InitalPageState extends State<InitalPage> {
     HomePage(),
     TransactionHistoryPage(),
   ];
+
+  @override
+  void initState() {
+    _changePageCubit = GetIt.I.get<ChangePageCubit>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -446,15 +458,27 @@ class _InitalPageState extends State<InitalPage> {
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         body: Stack(
           children: [
-            IndexedStack(
-              index: paginaAtual,
-              children: screens,
+            BlocBuilder<ChangePageCubit, ChangePageState>(
+              bloc: _changePageCubit,
+              builder: (context, state) {
+                if (state is ChangedPageInitialState) {
+                  return IndexedStack(
+                    index: state.pageIndex,
+                    children: screens,
+                  );
+                }
+                state = state as ChangedPageState;
+                return IndexedStack(
+                  index: state.pageIndex,
+                  children: screens,
+                );
+              },
             ),
             Positioned(
               bottom: 8,
-              left: (size.width - (size.width* 0.7)) / 2,
+              left: (size.width - (size.width * 0.7)) / 2,
               // right: 0,
-              width: size.width* 0.7,
+              width: size.width * 0.7,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Container(
@@ -462,7 +486,7 @@ class _InitalPageState extends State<InitalPage> {
                   // shape: AutomaticNotchedShape(),
                   height: 54,
                   // width: 300,
-                  
+
                   color: Colors.grey[900],
                   // margin: EdgeInsets.only(bottom: 10, left: 40, right: 40),
                   // decoration: BoxDecoration(
@@ -482,11 +506,30 @@ class _InitalPageState extends State<InitalPage> {
                             // mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.home,
-                                size: 26,
-                                color:
-                                    paginaAtual == 0 ? blue : Colors.grey[100],
+                              BlocBuilder<ChangePageCubit, ChangePageState>(
+                                bloc: _changePageCubit,
+                                builder: (context, state) {
+                                  var paginaAtual;
+                                  if (state is ChangedPageInitialState) {
+                                    paginaAtual = state.pageIndex;
+                                    return Icon(
+                                      Icons.home,
+                                      size: 26,
+                                      color: paginaAtual == 0
+                                          ? blue
+                                          : Colors.grey[100],
+                                    );
+                                  }
+                                  state = state as ChangedPageState;
+                                  paginaAtual = state.pageIndex;
+                                  return Icon(
+                                    Icons.home,
+                                    size: 26,
+                                    color: paginaAtual == 0
+                                        ? blue
+                                        : Colors.grey[100],
+                                  );
+                                },
                               ),
                               // Text(
                               //   "Home",
@@ -501,11 +544,12 @@ class _InitalPageState extends State<InitalPage> {
                           ),
                         ),
                         onTap: () {
-                          setState(() {
-                            paginaAtual = 0;
-                          });
+                          // setState(() {
+                          //   paginaAtual = 0;
+                          // });
+                          _changePageCubit.changePage(pageIndex: 0);
                           FocusScopeNode currentFocus = FocusScope.of(context);
-            
+
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
@@ -546,11 +590,11 @@ class _InitalPageState extends State<InitalPage> {
                             // );
                             FocusScopeNode currentFocus =
                                 FocusScope.of(context);
-            
+
                             if (!currentFocus.hasPrimaryFocus) {
                               currentFocus.unfocus();
                             }
-            
+
                             showModalBottomSheet(
                               context: context,
                               backgroundColor: Colors.transparent,
@@ -697,10 +741,30 @@ class _InitalPageState extends State<InitalPage> {
                               //   color:
                               //       paginaAtual == 1 ? darkerBlue : Colors.blueGrey,
                               // ),
-                              Icon(
-                                Icons.format_list_bulleted_rounded,
-                                color:
-                                    paginaAtual == 1 ? blue : Colors.grey[300],
+                              BlocBuilder<ChangePageCubit, ChangePageState>(
+                                bloc: _changePageCubit,
+                                builder: (context, state) {
+                                  var paginaAtual;
+                                  if (state is ChangedPageInitialState) {
+                                    paginaAtual = state.pageIndex;
+                                    return Icon(
+                                      Icons.format_list_bulleted_rounded,
+                                      size: 26,
+                                      color: paginaAtual == 1
+                                          ? blue
+                                          : Colors.grey[100],
+                                    );
+                                  }
+                                  state = state as ChangedPageState;
+                                  paginaAtual = state.pageIndex;
+                                  return Icon(
+                                    Icons.format_list_bulleted_rounded,
+                                    size: 26,
+                                    color: paginaAtual == 1
+                                        ? blue
+                                        : Colors.grey[100],
+                                  );
+                                },
                               ),
                               // Text(
                               //   "Histórico",
@@ -715,11 +779,12 @@ class _InitalPageState extends State<InitalPage> {
                           ),
                         ),
                         onTap: () {
-                          setState(() {
-                            paginaAtual = 1;
-                          });
+                          // setState(() {
+                          //   paginaAtual = 1;
+                          // });
+                          _changePageCubit.changePage(pageIndex: 1);
                           FocusScopeNode currentFocus = FocusScope.of(context);
-            
+
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }

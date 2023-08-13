@@ -24,6 +24,7 @@ import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubi
 import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectPaymentMethod/select_payment_method_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/createTransactionFeature/cubits/selectTransactionCategory/select_transaction_category_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/authentication/authentication_cubit.dart';
+import 'package:finance_app/layers/presentation/ui/cubits/changePage/change_page_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/getUserDetails/get_user_details_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
 import 'package:finance_app/layers/presentation/ui/cubits/signUp/sign_up_cubit.dart';
@@ -133,6 +134,9 @@ class InjectionContainer {
     );
     getIt.registerLazySingleton<SelectPaymentMethodCubit>(
       () => SelectPaymentMethodCubit(),
+    );
+    getIt.registerLazySingleton<ChangePageCubit>(
+      () => ChangePageCubit(),
     );
   }
 }
