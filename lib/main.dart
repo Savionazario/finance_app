@@ -10,7 +10,6 @@ import 'package:finance_app/layers/domain/usecases/signOut/sign_out_usecase_impl
 import 'package:finance_app/layers/presentation/ui/pages/auth_check.dart';
 import 'package:finance_app/layers/presentation/ui/pages/inital_page.dart';
 import 'package:finance_app/layers/presentation/ui/pages/login_page.dart';
-import 'package:finance_app/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,45 +26,7 @@ void main() async {
   );
 
   runApp(
-    MultiProvider(
-      providers: [
-        Provider(create: (context) => AuthService()),
-        Provider(create: (context) => FirebaseAuthenticationDataSourceImpl()),
-        Provider(
-          create: (context) => UserRepositoryImpl(
-            context.read<FirebaseAuthenticationDataSourceImpl>(),
-          ),
-        ),
-        Provider(
-          create: (context) => IsSignInUseCaseImpl(
-            context.read<UserRepositoryImpl>(),
-          ),
-        ),
-        Provider(
-          create: (context) => SignInWithEmailAndPasswordUseCaseImpl(
-            context.read<UserRepositoryImpl>(),
-          ),
-        ),
-        Provider(
-          create: (context) => SignOutUseCaseImpl(
-            context.read<UserRepositoryImpl>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => AuthenticationCubit(
-            context.read<IsSignInUseCaseImpl>(),
-            context.read<SignOutUseCaseImpl>(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => LoginCubit(
-            context.read<SignInWithEmailAndPasswordUseCaseImpl>(),
-            context.read<AuthenticationCubit>(),
-          ),
-        ),
-      ],
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 

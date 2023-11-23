@@ -2,7 +2,6 @@ import 'package:finance_app/layers/presentation/ui/cubits/authentication/authent
 import 'package:finance_app/layers/presentation/ui/cubits/login/login_cubit.dart';
 import 'package:finance_app/layers/domain/usecases/isSignIn/is_sign_in_usecase.dart';
 import 'package:finance_app/layers/domain/usecases/signOut/sign_out_usecase.dart';
-import 'package:finance_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

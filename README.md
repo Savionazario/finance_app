@@ -1,16 +1,22 @@
-# finance_app
+# Finance app
 
-A new Flutter project.
+# Sobre o projeto
 
-## Getting Started
+Finance app é uma aplicação para gestão de finanças pessoais. Com design intuitivo e funcionalidades abrangentes, oferece controle financeiro eficiente na ponta dos dedos, simplificando a organização e o planejamento financeiro pessoal.
 
-This project is a starting point for a Flutter application.
+## Layout
+<img src="https://github.com/Savionazario/assets/blob/main/images/mobile1.jpeg" alt="Descrição da imagem" width="240" height="520"> <img src="https://github.com/Savionazario/assets/blob/main/images/mobile2.jpeg" alt="Descrição da imagem" width="240" height="520"> <img src="https://github.com/Savionazario/assets/blob/main/images/mobile3.jpeg" alt="Descrição da imagem" width="240" height="520">
 
-A few resources to get you started if this is your first Flutter project:
+# Tecnologias utilizadas
+## Back end
+- Firebase Firestore
+## Mobile
+- Flutter/Dart
+- Cubit
+- GetIt
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# Autor
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Sávio Nazário Alexandre
+
+https://www.linkedin.com/in/savionazario/

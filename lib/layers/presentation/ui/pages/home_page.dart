@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Boa noite,",
+                                      "Bom dia,",
                                       style: GoogleFonts.openSans(
                                         textStyle: TextStyle(
                                           fontSize: 12,
