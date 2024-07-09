@@ -14,6 +14,7 @@ Finance app é uma aplicação para gestão de finanças pessoais. Com design in
 - Flutter/Dart
 - Cubit
 - GetIt
+- dartz
 
 # Autor
 
